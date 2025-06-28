@@ -1,105 +1,206 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wooden Design</title>
-  <style>
-    body { margin: 0; overflow: hidden; font-family: sans-serif; }
-    #ui { position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 4px; }
-    #dropArea { border: 2px dashed #888; padding: 20px; text-align: center; margin-top: 10px; }
-    #dropArea.hover { background: #eef; }
-    select { width: 100%; }
-  </style>
-</head>
-<body>
-  <div id="ui">
-    <label for="modelSelect">Select Model:</label>
-    <select id="modelSelect">
-      <option value="models/plank1.gltf">Plank 1</option>
-      <option value="models/plank2.gltf">Plank 2</option>
-    </select>
-    <div id="dropArea">Drag &amp; Drop Texture Here</div>
-  </div>
-  <script type="module">
-    import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
-    import { GLTFLoader } from 'https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
-    import { OrbitControls } from 'https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wooden Design</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: sans-serif;
+      }
+      #ui {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 4px;
+      }
+      #dropArea {
+        border: 2px dashed #888;
+        padding: 20px;
+        text-align: center;
+        margin-top: 10px;
+      }
+      #dropArea.hover {
+        background: #eef;
+      }
+      select {
+        width: 100%;
+      }
+      button {
+        margin-top: 10px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ui">
+      <label for="modelSelect">Select Model:</label>
+      <select id="modelSelect" aria-label="Model selection">
+        <option value="models/plank1.gltf">Plank 1</option>
+        <option value="models/plank2.gltf">Plank 2</option>
+      </select>
+      <div id="dropArea" aria-label="Drop texture" role="button">
+        Drag &amp; Drop Texture Here
+      </div>
+      <button id="copyLink" aria-label="Copy shareable link">Copy Link</button>
+    </div>
+    <script type="module">
+      import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
+      import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
+      import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
+      import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
-    let scene, camera, renderer, controls, model;
+      let scene, camera, renderer, controls, model;
+      const params = {
+        model: "models/plank1.gltf",
+        roughness: 0.5,
+        metalness: 0.0,
+      };
 
-    init();
-    loadModel(document.getElementById('modelSelect').value);
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("model")) params.model = urlParams.get("model");
+      if (urlParams.has("roughness"))
+        params.roughness = parseFloat(urlParams.get("roughness"));
+      if (urlParams.has("metalness"))
+        params.metalness = parseFloat(urlParams.get("metalness"));
 
-    function init() {
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xaaaaaa);
-      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.set(0, 2, 5);
+      init();
+      document.getElementById("modelSelect").value = params.model;
+      loadModel(params.model);
 
-      renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
+      function init() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xaaaaaa);
+        camera = new THREE.PerspectiveCamera(
+          45,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          100,
+        );
+        camera.position.set(0, 2, 5);
 
-      controls = new OrbitControls(camera, renderer.domElement);
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-      const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
-      scene.add(light);
+        controls = new OrbitControls(camera, renderer.domElement);
 
-      window.addEventListener('resize', onWindowResize);
-      animate();
-    }
+        const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+        scene.add(light);
 
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
+        window.addEventListener("resize", onWindowResize);
+        animate();
+      }
 
-    function loadModel(path) {
-      const loader = new GLTFLoader();
-      loader.load(path, (gltf) => {
-        if (model) {
-          scene.remove(model);
-        }
-        model = gltf.scene;
-        scene.add(model);
-      });
-    }
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
 
-    function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
+      function updateURL() {
+        const q = new URLSearchParams();
+        q.set("model", params.model);
+        q.set("roughness", params.roughness.toFixed(2));
+        q.set("metalness", params.metalness.toFixed(2));
+        history.replaceState(null, "", `?${q.toString()}`);
+      }
 
-    document.getElementById('modelSelect').addEventListener('change', (e) => {
-      loadModel(e.target.value);
-    });
-
-    const textureLoader = new THREE.TextureLoader();
-    const dropArea = document.getElementById('dropArea');
-    dropArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropArea.classList.add('hover');
-    });
-    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('hover'));
-    dropArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropArea.classList.remove('hover');
-      const file = e.dataTransfer.files[0];
-      if (!file) return;
-      const url = URL.createObjectURL(file);
-      textureLoader.load(url, (tex) => {
-        if (model) {
+      function loadModel(path) {
+        const loader = new GLTFLoader();
+        loader.load(path, (gltf) => {
+          if (model) {
+            scene.remove(model);
+          }
+          model = gltf.scene;
           model.traverse((child) => {
             if (child.isMesh) {
-              child.material.map = tex;
-              child.material.needsUpdate = true;
+              const mat = new THREE.MeshStandardMaterial({
+                map: child.material.map,
+                roughness: params.roughness,
+                metalness: params.metalness,
+              });
+              child.material = mat;
             }
           });
-        }
+          scene.add(model);
+          updateURL();
+        });
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+      }
+
+      document.getElementById("modelSelect").addEventListener("change", (e) => {
+        params.model = e.target.value;
+        loadModel(params.model);
       });
-    });
-  </script>
-</body>
+
+      const textureLoader = new THREE.TextureLoader();
+      const dropArea = document.getElementById("dropArea");
+      dropArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropArea.classList.add("hover");
+      });
+      dropArea.addEventListener("dragleave", () => {
+        dropArea.classList.remove("hover");
+      });
+      dropArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropArea.classList.remove("hover");
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        textureLoader.load(url, (tex) => {
+          if (model) {
+            model.traverse((child) => {
+              if (child.isMesh) {
+                child.material.map = tex;
+                child.material.needsUpdate = true;
+              }
+            });
+          }
+        });
+      });
+
+      const gui = new GUI();
+      gui.add(params, "roughness", 0, 1, 0.01).onChange((v) => {
+        params.roughness = v;
+        if (model) {
+          model.traverse((child) => {
+            if (child.isMesh) child.material.roughness = v;
+          });
+        }
+        updateURL();
+      });
+      gui.add(params, "metalness", 0, 1, 0.01).onChange((v) => {
+        params.metalness = v;
+        if (model) {
+          model.traverse((child) => {
+            if (child.isMesh) child.material.metalness = v;
+          });
+        }
+        updateURL();
+      });
+
+      document
+        .getElementById("copyLink")
+        .addEventListener("click", async () => {
+          updateURL();
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            alert("Link copied to clipboard");
+          } catch (err) {
+            console.error(err);
+          }
+        });
+    </script>
+  </body>
 </html>
