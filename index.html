@@ -34,29 +34,46 @@
         font-size: 1em;
       }
       #viewer {
-        width: 80vw;
-        height: 80vh;
+        width: 100vw;
+        height: 100vh;
         border: 1px solid #555;
         box-sizing: border-box;
-        position: relative;
-        border-radius: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        border-radius: 0;
         background: #fff;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        box-shadow: none;
       }
       #eventViewer {
-        width: 80vw;
-        margin-top: 8px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 24px;
+        max-height: 50vh;
+        overflow: hidden;
+        z-index: 20;
+      }
+      #eventViewer summary {
+        cursor: ns-resize;
+        list-style: none;
+        padding: 4px;
+        border-top: 2px solid #666;
+        background: rgba(255, 255, 255, 0.9);
+      }
+      #eventViewer summary::-webkit-details-marker {
+        display: none;
       }
       #eventLog {
         width: 100%;
-        max-height: 25vh;
+        height: calc(100% - 24px);
         overflow-y: auto;
         background: rgba(255, 255, 255, 0.9);
         border: 1px solid #ccc;
         padding: 8px;
         font-size: 0.8em;
-        border-radius: 4px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
       }
       #dropArea {
         border: 2px dashed #888;
@@ -326,6 +343,7 @@
             sheenRoughness: params.sheenRoughness,
             anisotropy: params.anisotropy,
             anisotropyRotation: params.anisotropyRotation,
+            side: THREE.DoubleSide,
           });
           model = new THREE.Mesh(geometry, material);
           scene.add(model);
@@ -354,6 +372,7 @@
                   sheenRoughness: params.sheenRoughness,
                   anisotropy: params.anisotropy,
                   anisotropyRotation: params.anisotropyRotation,
+                  side: THREE.DoubleSide,
                 });
                 child.material = mat;
               }
@@ -518,6 +537,7 @@
                   sheenRoughness: params.sheenRoughness,
                   anisotropy: params.anisotropy,
                   anisotropyRotation: params.anisotropyRotation,
+                  side: THREE.DoubleSide,
                 });
               }
             });
@@ -536,6 +556,36 @@
             console.error(err);
           }
         });
+
+      const ev = document.getElementById('eventViewer');
+      const evSummary = ev.querySelector('summary');
+      let startY = 0;
+      let startH = 0;
+      evSummary.addEventListener('mousedown', (e) => {
+        startY = e.clientY;
+        startH = ev.offsetHeight;
+        document.body.style.userSelect = 'none';
+        window.addEventListener('mousemove', onDrag);
+        window.addEventListener('mouseup', endDrag);
+      });
+
+      function onDrag(e) {
+        const diff = startY - e.clientY;
+        const minH = evSummary.offsetHeight;
+        let h = Math.min(window.innerHeight * 0.8, Math.max(minH, startH + diff));
+        ev.style.height = h + 'px';
+        if (h > minH + 5) {
+          ev.open = true;
+        } else {
+          ev.open = false;
+        }
+      }
+
+      function endDrag() {
+        document.body.style.userSelect = '';
+        window.removeEventListener('mousemove', onDrag);
+        window.removeEventListener('mouseup', endDrag);
+      }
     </script>
   </body>
 </html>
