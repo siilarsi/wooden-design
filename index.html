@@ -9,6 +9,9 @@
         margin: 0;
         overflow: hidden;
         font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       #ui {
         position: absolute;
@@ -28,10 +31,23 @@
         font-size: 1em;
       }
       #viewer {
-        width: 100vw;
-        height: 100vh;
+        width: 80vw;
+        height: 80vh;
         border: 2px solid #444;
         box-sizing: border-box;
+        position: relative;
+      }
+      #eventLog {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        width: 300px;
+        max-height: 150px;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ccc;
+        padding: 8px;
+        font-size: 0.8em;
       }
       #dropArea {
         border: 2px dashed #888;
@@ -93,7 +109,9 @@
     </style>
   </head>
   <body>
-    <div id="viewer"></div>
+    <div id="viewer">
+      <div id="eventLog"></div>
+    </div>
     <div id="ui">
       <p id="instructions">
         Select a plank model and apply your texture using drag &amp; drop or the
@@ -137,13 +155,22 @@
       </button>
     </div>
     <script type="module">
-      import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js?module";
-      import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js?module";
-      import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js?module";
+      import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
+      import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
+      import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
       import { buildQuery, debounce } from "./src/utils.js";
       import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
-      console.log('Wooden Design viewer initialized');
+      function logEvent(msg) {
+        const box = document.getElementById('eventLog');
+        const div = document.createElement('div');
+        div.textContent = msg;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+        console.log(msg);
+      }
+
+      logEvent('Wooden Design viewer initialized');
 
       let scene, camera, renderer, controls, model;
       const params = {
@@ -213,7 +240,7 @@
 
         controls = new OrbitControls(camera, renderer.domElement);
         controls.update();
-        console.log('Camera initialized at', camera.position.toArray());
+        logEvent('Camera initialized at ' + camera.position.toArray().join(', '));
 
         const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
         scene.add(light);
@@ -247,7 +274,7 @@
 
       function loadModel(path) {
         const loader = new GLTFLoader();
-        console.log('Loading model', path);
+        logEvent('Loading model ' + path);
         loader.load(
           path,
           (gltf) => {
@@ -275,12 +302,14 @@
             });
             scene.add(model);
             const box = new THREE.Box3().setFromObject(model);
-            console.log('Model loaded with bounding box', box.min.toArray(), box.max.toArray());
-            console.log('Scene now has', scene.children.length, 'objects');
+            logEvent('Model loaded with bounding box ' +
+              box.min.toArray().join(',') + ' to ' + box.max.toArray().join(','));
+            logEvent('Scene now has ' + scene.children.length + ' objects');
             updateURL();
           },
           undefined,
           (err) => {
+            logEvent('Failed to load model ' + err.message);
             console.error('Failed to load model', err);
           },
         );
@@ -322,7 +351,7 @@
       function applyTexture(file) {
         if (!file) return;
         const url = URL.createObjectURL(file);
-        console.log('Loading texture', file.name);
+        logEvent('Loading texture ' + file.name);
         textureLoader.load(
           url,
           (tex) => {
@@ -336,10 +365,11 @@
             }
             URL.revokeObjectURL(url);
             updateMaterials();
-            console.log('Texture applied to model');
+            logEvent('Texture applied to model');
           },
           undefined,
           (err) => {
+            logEvent('Failed to load texture ' + err.message);
             console.error('Failed to load texture', err);
           },
         );
@@ -437,7 +467,7 @@
                 });
               }
             });
-            console.log('Updated material parameters', JSON.stringify(params));
+            logEvent('Updated material parameters ' + JSON.stringify(params));
           }
           updateURL();
         }
