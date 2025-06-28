@@ -42,11 +42,12 @@
         background: #fff;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
+      #eventViewer {
+        width: 80vw;
+        margin-top: 8px;
+      }
       #eventLog {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        width: 320px;
+        width: 100%;
         max-height: 25vh;
         overflow-y: auto;
         background: rgba(255, 255, 255, 0.9);
@@ -128,9 +129,11 @@
     </style>
   </head>
   <body>
-    <div id="viewer">
+    <div id="viewer"></div>
+    <details id="eventViewer">
+      <summary>Event Log</summary>
       <div id="eventLog"></div>
-    </div>
+    </details>
     <div id="ui">
       <p id="instructions">
         Select a plank model and apply your texture using drag &amp; drop or the
@@ -142,6 +145,9 @@
         <select id="modelSelect" aria-label="Model selection">
           <option value="models/plank1.gltf">Plank 1</option>
           <option value="models/plank2.gltf">Plank 2</option>
+          <option value="cube">Cube</option>
+          <option value="sphere">Sphere</option>
+          <option value="cylinder">Cylinder</option>
         </select>
         <span class="help" data-tooltip="Select a predefined 3D plank model to preview">?</span>
       </section>
@@ -199,7 +205,6 @@
       logEvent('Wooden Design viewer initialized');
 
       let scene, camera, renderer, controls, model;
-      let firstFrame = true;
       const params = {
         model: "models/plank1.gltf",
         roughness: 0.5,
@@ -283,7 +288,6 @@
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
-        logEvent('Resized viewer to ' + container.clientWidth + 'x' + container.clientHeight);
       }
       const updateURL = debounce(() => {
         const q = buildQuery({
@@ -303,14 +307,36 @@
       }, 200);
 
       function loadModel(path) {
+        if (["cube", "sphere", "cylinder"].includes(path)) {
+          if (model) scene.remove(model);
+          let geometry;
+          if (path === "cube") geometry = new THREE.BoxGeometry();
+          else if (path === "sphere") geometry = new THREE.SphereGeometry(1, 32, 16);
+          else geometry = new THREE.CylinderGeometry(1, 1, 2, 32);
+          const material = new THREE.MeshPhysicalMaterial({
+            roughness: params.roughness,
+            metalness: params.metalness,
+            clearcoat: params.clearcoat,
+            clearcoatRoughness: params.clearcoatRoughness,
+            specularIntensity: params.specularIntensity,
+            specularColor: new THREE.Color(params.specularColor),
+            sheenColor: new THREE.Color(params.sheenColor),
+            sheenRoughness: params.sheenRoughness,
+            anisotropy: params.anisotropy,
+            anisotropyRotation: params.anisotropyRotation,
+          });
+          model = new THREE.Mesh(geometry, material);
+          scene.add(model);
+          logEvent('Loaded model ' + path);
+          updateURL();
+          return;
+        }
         const loader = new GLTFLoader();
         logEvent('Loading model ' + path);
         loader.load(
           path,
           (gltf) => {
-            if (model) {
-              scene.remove(model);
-            }
+            if (model) scene.remove(model);
             model = gltf.scene;
             model.traverse((child) => {
               if (child.isMesh) {
@@ -322,8 +348,8 @@
                   clearcoatRoughness: params.clearcoatRoughness,
                   specularIntensity: params.specularIntensity,
                   specularColor: new THREE.Color(params.specularColor),
-                 sheenColor: new THREE.Color(params.sheenColor),
-                 sheenRoughness: params.sheenRoughness,
+                  sheenColor: new THREE.Color(params.sheenColor),
+                  sheenRoughness: params.sheenRoughness,
                   anisotropy: params.anisotropy,
                   anisotropyRotation: params.anisotropyRotation,
                 });
@@ -331,12 +357,7 @@
               }
             });
             scene.add(model);
-            const box = new THREE.Box3().setFromObject(model);
-            const sphere = box.getBoundingSphere(new THREE.Sphere());
-            logEvent('Model loaded with bounding box ' +
-              box.min.toArray().join(',') + ' to ' + box.max.toArray().join(','));
-            logEvent('Bounding sphere center ' + sphere.center.toArray().join(',') + ' radius ' + sphere.radius.toFixed(2));
-            logEvent('Scene now has ' + scene.children.length + ' objects');
+            logEvent('Loaded model ' + path);
             updateURL();
           },
           undefined,
@@ -349,10 +370,6 @@
 
       function animate() {
         requestAnimationFrame(animate);
-        if (firstFrame) {
-          logEvent('First frame rendered');
-          firstFrame = false;
-        }
         renderer.render(scene, camera);
       }
 
@@ -391,7 +408,6 @@
         textureLoader.load(
           url,
           (tex) => {
-            logEvent('Texture size ' + tex.image.width + 'x' + tex.image.height);
             if (model) {
               model.traverse((child) => {
                 if (child.isMesh) {
@@ -504,7 +520,6 @@
                 });
               }
             });
-            logEvent('Updated material parameters ' + JSON.stringify(params));
           }
           updateURL();
         }
