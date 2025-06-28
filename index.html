@@ -235,6 +235,8 @@
       });
 
       let scene, camera, renderer, controls, model;
+      let lastTextureName = '';
+      let currentTexture = null;
       const params = {
         model: "models/plank1.gltf",
         roughness: 0.5,
@@ -457,6 +459,7 @@
       const preview = document.getElementById("texturePreview");
       const fileInput = document.getElementById("textureInput");
 
+      dropArea.textContent = 'Drag & Drop Texture Here';
       let lastTextureName = '';
       let currentTexture = null;
       dropMessage.style.display = 'block';
