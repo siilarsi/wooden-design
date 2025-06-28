@@ -5,6 +5,11 @@ describe('buildQuery', () => {
     const q = buildQuery({a:1,b:0.1234,c:'x'});
     expect(q).toEqual('a=1.00&b=0.12&c=x');
   });
+
+  it('includes anisotropy values', () => {
+    const q = buildQuery({anisotropy: 0.3456});
+    expect(q).toEqual('anisotropy=0.35');
+  });
 });
 
 describe('debounce', () => {

@@ -27,6 +27,12 @@
         margin: 0 0 4px;
         font-size: 1em;
       }
+      #viewer {
+        width: 100vw;
+        height: 100vh;
+        border: 2px solid #444;
+        box-sizing: border-box;
+      }
       #dropArea {
         border: 2px dashed #888;
         padding: 20px;
@@ -76,7 +82,7 @@
         padding: 6px 8px;
         border-radius: 4px;
         white-space: normal;
-        max-width: 220px;
+        max-width: 320px;
         font-size: 0.85em;
         display: none;
         z-index: 100;
@@ -87,6 +93,7 @@
     </style>
   </head>
   <body>
+    <div id="viewer"></div>
     <div id="ui">
       <p id="instructions">
         Select a plank model and apply your texture using drag &amp; drop or the
@@ -146,6 +153,8 @@
         specularColor: "#111111",
         sheenColor: "#000000",
         sheenRoughness: 0.5,
+        anisotropy: 0,
+        anisotropyRotation: 0,
         finish: "custom",
       };
 
@@ -171,6 +180,12 @@
         params.sheenColor = urlParams.get("sheenColor");
       if (urlParams.has("sheenRoughness"))
         params.sheenRoughness = parseFloat(urlParams.get("sheenRoughness"));
+      if (urlParams.has("anisotropy"))
+        params.anisotropy = parseFloat(urlParams.get("anisotropy"));
+      if (urlParams.has("anisotropyRotation"))
+        params.anisotropyRotation = parseFloat(
+          urlParams.get("anisotropyRotation"),
+        );
 
       init();
       document.getElementById("modelSelect").value = params.model;
@@ -188,9 +203,10 @@
         );
         camera.position.set(0, 2, 5);
 
+        const container = document.getElementById("viewer");
         renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
 
         controls = new OrbitControls(camera, renderer.domElement);
 
@@ -202,9 +218,10 @@
       }
 
       function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
+        const container = document.getElementById("viewer");
+        camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(container.clientWidth, container.clientHeight);
       }
       const updateURL = debounce(() => {
         const q = buildQuery({
@@ -217,6 +234,8 @@
           specularColor: params.specularColor,
           sheenColor: params.sheenColor,
           sheenRoughness: params.sheenRoughness,
+          anisotropy: params.anisotropy,
+          anisotropyRotation: params.anisotropyRotation,
         });
         history.replaceState(null, "", `?${q}`);
       }, 200);
@@ -238,8 +257,10 @@
                 clearcoatRoughness: params.clearcoatRoughness,
                 specularIntensity: params.specularIntensity,
                 specularColor: new THREE.Color(params.specularColor),
-                sheenColor: new THREE.Color(params.sheenColor),
-                sheenRoughness: params.sheenRoughness,
+               sheenColor: new THREE.Color(params.sheenColor),
+               sheenRoughness: params.sheenRoughness,
+                anisotropy: params.anisotropy,
+                anisotropyRotation: params.anisotropyRotation,
               });
               child.material = mat;
             }
@@ -355,6 +376,12 @@
       const sheenRoughCtrl = gui
         .add(params, "sheenRoughness", 0, 1, 0.01)
         .onChange(updateMaterials);
+      const anisoCtrl = gui
+        .add(params, "anisotropy", 0, 1, 0.01)
+        .onChange(updateMaterials);
+      const anisoRotCtrl = gui
+        .add(params, "anisotropyRotation", 0, Math.PI * 2, 0.01)
+        .onChange(updateMaterials);
 
       roughCtrl.setValue(params.roughness);
       metalCtrl.setValue(params.metalness);
@@ -364,6 +391,8 @@
       specColorCtrl.setValue(params.specularColor);
       sheenColorCtrl.setValue(params.sheenColor);
       sheenRoughCtrl.setValue(params.sheenRoughness);
+      anisoCtrl.setValue(params.anisotropy);
+      anisoRotCtrl.setValue(params.anisotropyRotation);
 
       function updateMaterials() {
         if (model) {
@@ -378,6 +407,8 @@
                 specularColor: new THREE.Color(params.specularColor),
                 sheenColor: new THREE.Color(params.sheenColor),
                 sheenRoughness: params.sheenRoughness,
+                anisotropy: params.anisotropy,
+                anisotropyRotation: params.anisotropyRotation,
               });
             }
           });
