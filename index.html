@@ -97,10 +97,8 @@
     <div id="ui">
       <p id="instructions">
         Select a plank model and apply your texture using drag &amp; drop or the
-        <strong>Upload</strong> button. If nothing appears, run
-        <code>python3 -m http.server</code> in this folder and open
-        <code>http://localhost:8000/index.html</code>. Open the developer
-        console for detailed loading logs.
+        <strong>Upload</strong> button. Detailed loading logs are shown in the
+        browser console.
       </p>
       <section>
         <h2>Model<span class="help" data-tooltip="Choose which wood plank geometry to view">?</span></h2>
@@ -214,6 +212,8 @@
         container.appendChild(renderer.domElement);
 
         controls = new OrbitControls(camera, renderer.domElement);
+        controls.update();
+        console.log('Camera initialized at', camera.position.toArray());
 
         const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
         scene.add(light);
@@ -274,8 +274,10 @@
               }
             });
             scene.add(model);
+            const box = new THREE.Box3().setFromObject(model);
+            console.log('Model loaded with bounding box', box.min.toArray(), box.max.toArray());
+            console.log('Scene now has', scene.children.length, 'objects');
             updateURL();
-            console.log('Model loaded');
           },
           undefined,
           (err) => {
@@ -334,7 +336,7 @@
             }
             URL.revokeObjectURL(url);
             updateMaterials();
-            console.log('Texture applied');
+            console.log('Texture applied to model');
           },
           undefined,
           (err) => {
@@ -417,27 +419,28 @@
       anisoCtrl.setValue(params.anisotropy);
       anisoRotCtrl.setValue(params.anisotropyRotation);
 
-      function updateMaterials() {
-        if (model) {
-          model.traverse((child) => {
-            if (child.isMesh) {
-              Object.assign(child.material, {
-                roughness: params.roughness,
-                metalness: params.metalness,
-                clearcoat: params.clearcoat,
-                clearcoatRoughness: params.clearcoatRoughness,
-                specularIntensity: params.specularIntensity,
-                specularColor: new THREE.Color(params.specularColor),
-                sheenColor: new THREE.Color(params.sheenColor),
-                sheenRoughness: params.sheenRoughness,
-                anisotropy: params.anisotropy,
-                anisotropyRotation: params.anisotropyRotation,
-              });
-            }
-          });
+        function updateMaterials() {
+          if (model) {
+            model.traverse((child) => {
+              if (child.isMesh) {
+                Object.assign(child.material, {
+                  roughness: params.roughness,
+                  metalness: params.metalness,
+                  clearcoat: params.clearcoat,
+                  clearcoatRoughness: params.clearcoatRoughness,
+                  specularIntensity: params.specularIntensity,
+                  specularColor: new THREE.Color(params.specularColor),
+                  sheenColor: new THREE.Color(params.sheenColor),
+                  sheenRoughness: params.sheenRoughness,
+                  anisotropy: params.anisotropy,
+                  anisotropyRotation: params.anisotropyRotation,
+                });
+              }
+            });
+            console.log('Updated material parameters', JSON.stringify(params));
+          }
+          updateURL();
         }
-        updateURL();
-      }
 
       document
         .getElementById("copyLink")

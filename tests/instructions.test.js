@@ -3,8 +3,8 @@ import fs from 'fs';
 const html = fs.readFileSync('index.html', 'utf8');
 
 describe('instructions', () => {
-  it('mentions running a local server', () => {
+  it('does not mention developer setup', () => {
     const hasHint = /http\.server/.test(html);
-    expect(hasHint).toEqual(true);
+    expect(hasHint).toEqual(false);
   });
 });
