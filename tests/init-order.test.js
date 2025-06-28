@@ -1,8 +1,6 @@
 import fs from 'fs';
 
-const html = fs.readFileSync('index.html', 'utf8');
-const match = html.match(/<script type="module">([\s\S]*?)<\/script>/);
-const script = match ? match[1] : '';
+const script = fs.readFileSync('src/main.js', 'utf8');
 
 describe('initialization order', () => {
   it('declares updateURL before first loadModel call', () => {
