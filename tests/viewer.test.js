@@ -20,4 +20,14 @@ describe('viewer container', () => {
     const regex = /#eventViewer\s*{[^}]*position:\s*fixed;[^}]*bottom:\s*0;/;
     expect(regex.test(html)).toEqual(true);
   });
+
+  it('event viewer starts open', () => {
+    const hasOpen = /<details id="eventViewer"[^>]*open/.test(html);
+    expect(hasOpen).toEqual(true);
+  });
+
+  it('event viewer has no max-height limit', () => {
+    const regex = /#eventViewer\s*{[^}]*max-height:/;
+    expect(regex.test(html)).toEqual(false);
+  });
 });

@@ -54,7 +54,6 @@
         left: 0;
         width: 100vw;
         height: 24px;
-        max-height: 50vh;
         overflow: hidden;
         z-index: 20;
       }
@@ -164,7 +163,7 @@
   </head>
   <body>
     <div id="viewer"></div>
-    <details id="eventViewer">
+    <details id="eventViewer" open>
       <summary>Event Log</summary>
       <div id="eventLog"></div>
     </details>
@@ -381,6 +380,18 @@
             model = gltf.scene;
             model.traverse((child) => {
               if (child.isMesh) {
+                // give paper-thin planks some thickness
+                const pos = child.geometry.attributes.position;
+                if (pos && pos.count === 4) {
+                  const box = new THREE.Box3().setFromBufferAttribute(pos);
+                  const w = box.max.x - box.min.x;
+                  const d = box.max.z - box.min.z;
+                  const thickness = 0.1;
+                  const geom = new THREE.BoxGeometry(w, thickness, d);
+                  geom.translate((box.max.x + box.min.x) / 2, thickness / 2, (box.max.z + box.min.z) / 2);
+                  child.geometry.dispose();
+                  child.geometry = geom;
+                }
                 const mat = new THREE.MeshPhysicalMaterial({
                   map: currentTexture || child.material.map,
                   roughness: params.roughness,
@@ -583,6 +594,7 @@
                   anisotropyRotation: params.anisotropyRotation,
                   side: THREE.DoubleSide,
                 });
+                child.material.needsUpdate = true;
               }
             });
           }
@@ -605,13 +617,8 @@
       function onDrag(e) {
         const diff = startY - e.clientY;
         const minH = evSummary.offsetHeight;
-        let h = Math.min(window.innerHeight * 0.8, Math.max(minH, startH + diff));
+        const h = Math.max(minH, startH + diff);
         ev.style.height = h + 'px';
-        if (h > minH + 5) {
-          ev.open = true;
-        } else {
-          ev.open = false;
-        }
       }
 
       function endDrag() {
