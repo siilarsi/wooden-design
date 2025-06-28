@@ -260,6 +260,23 @@
           urlParams.get("anisotropyRotation"),
         );
 
+      const updateURL = debounce(() => {
+        const q = buildQuery({
+          model: params.model,
+          roughness: params.roughness,
+          metalness: params.metalness,
+          clearcoat: params.clearcoat,
+          clearcoatRoughness: params.clearcoatRoughness,
+          specularIntensity: params.specularIntensity,
+          specularColor: params.specularColor,
+          sheenColor: params.sheenColor,
+          sheenRoughness: params.sheenRoughness,
+          anisotropy: params.anisotropy,
+          anisotropyRotation: params.anisotropyRotation,
+        });
+        history.replaceState(null, "", `?${q}`);
+      }, 200);
+
       init();
       document.getElementById("modelSelect").value = params.model;
       document.getElementById("finishSelect").value = params.finish;
@@ -308,23 +325,6 @@
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
       }
-      const updateURL = debounce(() => {
-        const q = buildQuery({
-          model: params.model,
-          roughness: params.roughness,
-          metalness: params.metalness,
-          clearcoat: params.clearcoat,
-          clearcoatRoughness: params.clearcoatRoughness,
-          specularIntensity: params.specularIntensity,
-          specularColor: params.specularColor,
-          sheenColor: params.sheenColor,
-          sheenRoughness: params.sheenRoughness,
-          anisotropy: params.anisotropy,
-          anisotropyRotation: params.anisotropyRotation,
-        });
-        history.replaceState(null, "", `?${q}`);
-      }, 200);
-
       function loadModel(path) {
         if (["cube", "sphere", "cylinder"].includes(path)) {
           if (model) scene.remove(model);

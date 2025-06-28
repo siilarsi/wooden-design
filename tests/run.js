@@ -5,5 +5,6 @@ import './viewer.test.js';
 import './importmap.test.js';
 import './instructions.test.js';
 import './syntax.test.js';
+import './init-order.test.js';
 import { run } from './test-utils.js';
 await run();
