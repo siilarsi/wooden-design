@@ -8,20 +8,22 @@
       body {
         margin: 0;
         overflow: hidden;
-        font-family: sans-serif;
+        font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
+        background: linear-gradient(#d9dee8, #f3f4f8);
       }
       #ui {
         position: absolute;
         top: 10px;
         left: 10px;
         z-index: 10;
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.95);
         padding: 16px;
-        border-radius: 6px;
+        border-radius: 8px;
         max-width: 300px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
       #ui section {
         margin-bottom: 12px;
@@ -36,24 +38,31 @@
         border: 2px solid #444;
         box-sizing: border-box;
         position: relative;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       #eventLog {
         position: absolute;
         bottom: 10px;
-        left: 10px;
-        width: 300px;
-        max-height: 150px;
+        right: 10px;
+        width: 320px;
+        max-height: 25vh;
         overflow-y: auto;
         background: rgba(255, 255, 255, 0.9);
         border: 1px solid #ccc;
         padding: 8px;
         font-size: 0.8em;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       }
       #dropArea {
         border: 2px dashed #888;
         padding: 20px;
         text-align: center;
         margin-top: 10px;
+        border-radius: 4px;
+        transition: background 0.3s;
       }
       #dropArea.hover {
         background: #eef;
@@ -72,6 +81,16 @@
       button {
         margin-top: 10px;
         width: 100%;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        background: #007bff;
+        color: #fff;
+        cursor: pointer;
+        font-size: 1em;
+      }
+      button:hover {
+        background: #0056b3;
       }
       .help {
         display: inline-block;
@@ -174,12 +193,13 @@
         div.textContent = msg;
         box.appendChild(div);
         box.scrollTop = box.scrollHeight;
-        console.log(msg);
+        console.log('[Viewer]', msg);
       }
 
       logEvent('Wooden Design viewer initialized');
 
       let scene, camera, renderer, controls, model;
+      let firstFrame = true;
       const params = {
         model: "models/plank1.gltf",
         roughness: 0.5,
@@ -244,6 +264,8 @@
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
+        logEvent('Renderer created at ' + renderer.domElement.width + 'x' + renderer.domElement.height);
+        logEvent('WebGL version: ' + (renderer.capabilities.isWebGL2 ? 'WebGL2' : 'WebGL1'));
 
         controls = new OrbitControls(camera, renderer.domElement);
         controls.update();
@@ -261,6 +283,7 @@
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
+        logEvent('Resized viewer to ' + container.clientWidth + 'x' + container.clientHeight);
       }
       const updateURL = debounce(() => {
         const q = buildQuery({
@@ -309,8 +332,10 @@
             });
             scene.add(model);
             const box = new THREE.Box3().setFromObject(model);
+            const sphere = box.getBoundingSphere(new THREE.Sphere());
             logEvent('Model loaded with bounding box ' +
               box.min.toArray().join(',') + ' to ' + box.max.toArray().join(','));
+            logEvent('Bounding sphere center ' + sphere.center.toArray().join(',') + ' radius ' + sphere.radius.toFixed(2));
             logEvent('Scene now has ' + scene.children.length + ' objects');
             updateURL();
           },
@@ -324,6 +349,10 @@
 
       function animate() {
         requestAnimationFrame(animate);
+        if (firstFrame) {
+          logEvent('First frame rendered');
+          firstFrame = false;
+        }
         renderer.render(scene, camera);
       }
 
@@ -362,6 +391,7 @@
         textureLoader.load(
           url,
           (tex) => {
+            logEvent('Texture size ' + tex.image.width + 'x' + tex.image.height);
             if (model) {
               model.traverse((child) => {
                 if (child.isMesh) {
