@@ -26,7 +26,9 @@ This project aims to provide a web-based tool for designing wooden materials wit
 
 ## Getting Started
 
-Open `index.html` in a modern browser. Use the dropdown to switch between sample plank models. Drag and drop an image onto the drop zone to update the wood texture.
+Open `index.html` in a modern browser. Use the dropdown to switch between sample plank models.
+You can drag and drop an image onto the drop zone or use the **Upload Texture**
+button to load your own wood texture.
 
 Use the sliders to tweak roughness and metalness in real time. Click **Copy Link** to share your current design via the encoded URL parameters.
 
