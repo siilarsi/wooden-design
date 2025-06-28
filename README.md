@@ -29,3 +29,7 @@ This project aims to provide a web-based tool for designing wooden materials wit
 Open `index.html` in a modern browser. Use the dropdown to switch between sample plank models. Drag and drop an image onto the drop zone to update the wood texture.
 
 Use the sliders to tweak roughness and metalness in real time. Click **Copy Link** to share your current design via the encoded URL parameters.
+
+Newer builds expose additional controls for specular tint and sheen. Adjust the
+specular intensity and color to tune highlights, and modify the sheen color and
+roughness for velvet-like finishes.

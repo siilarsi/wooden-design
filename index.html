@@ -69,6 +69,10 @@
         metalness: 0.0,
         clearcoat: 0,
         clearcoatRoughness: 0,
+        specularIntensity: 1,
+        specularColor: "#111111",
+        sheenColor: "#000000",
+        sheenRoughness: 0.5,
         finish: "custom",
       };
 
@@ -82,6 +86,14 @@
         params.clearcoat = parseFloat(urlParams.get("clearcoat"));
       if (urlParams.has("clearcoatRoughness"))
         params.clearcoatRoughness = parseFloat(urlParams.get("clearcoatRoughness"));
+      if (urlParams.has("specularIntensity"))
+        params.specularIntensity = parseFloat(urlParams.get("specularIntensity"));
+      if (urlParams.has("specularColor"))
+        params.specularColor = urlParams.get("specularColor");
+      if (urlParams.has("sheenColor"))
+        params.sheenColor = urlParams.get("sheenColor");
+      if (urlParams.has("sheenRoughness"))
+        params.sheenRoughness = parseFloat(urlParams.get("sheenRoughness"));
 
       init();
       document.getElementById("modelSelect").value = params.model;
@@ -128,6 +140,16 @@
           "clearcoatRoughness",
           params.clearcoatRoughness.toFixed(2),
         );
+        q.set(
+          "specularIntensity",
+          params.specularIntensity.toFixed(2),
+        );
+        q.set("specularColor", params.specularColor);
+        q.set("sheenColor", params.sheenColor);
+        q.set(
+          "sheenRoughness",
+          params.sheenRoughness.toFixed(2),
+        );
         history.replaceState(null, "", `?${q.toString()}`);
       }
 
@@ -146,6 +168,10 @@
                 metalness: params.metalness,
                 clearcoat: params.clearcoat,
                 clearcoatRoughness: params.clearcoatRoughness,
+                specularIntensity: params.specularIntensity,
+                specularColor: new THREE.Color(params.specularColor),
+                sheenColor: new THREE.Color(params.sheenColor),
+                sheenRoughness: params.sheenRoughness,
               });
               child.material = mat;
             }
@@ -226,6 +252,27 @@
       const ccrCtrl = gui
         .add(params, "clearcoatRoughness", 0, 1, 0.01)
         .onChange(updateMaterials);
+      const specCtrl = gui
+        .add(params, "specularIntensity", 0, 2, 0.01)
+        .onChange(updateMaterials);
+      const specColorCtrl = gui
+        .addColor(params, "specularColor")
+        .onChange(updateMaterials);
+      const sheenColorCtrl = gui
+        .addColor(params, "sheenColor")
+        .onChange(updateMaterials);
+      const sheenRoughCtrl = gui
+        .add(params, "sheenRoughness", 0, 1, 0.01)
+        .onChange(updateMaterials);
+
+      roughCtrl.setValue(params.roughness);
+      metalCtrl.setValue(params.metalness);
+      ccCtrl.setValue(params.clearcoat);
+      ccrCtrl.setValue(params.clearcoatRoughness);
+      specCtrl.setValue(params.specularIntensity);
+      specColorCtrl.setValue(params.specularColor);
+      sheenColorCtrl.setValue(params.sheenColor);
+      sheenRoughCtrl.setValue(params.sheenRoughness);
 
       function updateMaterials() {
         if (model) {
@@ -236,6 +283,10 @@
                 metalness: params.metalness,
                 clearcoat: params.clearcoat,
                 clearcoatRoughness: params.clearcoatRoughness,
+                specularIntensity: params.specularIntensity,
+                specularColor: new THREE.Color(params.specularColor),
+                sheenColor: new THREE.Color(params.sheenColor),
+                sheenRoughness: params.sheenRoughness,
               });
             }
           });
