@@ -1,8 +1,41 @@
-Coding guidelines for this repository:
+# Project Guidelines
 
-- Run `npm test` and `npm run lint` before every commit. Ensure both pass.
-- Use the simple test framework under the `tests` directory. Add tests for all bug fixes and features.
-- Keep this file and CONTRIBUTING.md up to date if workflow changes.
-- Prefer small, maintainable functions and keep code DRY.
-- Refactor proactively to avoid merge conflicts.
-- Read CONTRIBUTING.md for general contribution guidelines.
+## 1. Project Structure & Navigation
+- `index.html` – standalone static page with viewer logic.
+- `src/` – JavaScript modules used by the viewer (`utils.js`).
+- `models/` – sample `.gltf` models used in tests and the demo.
+- `tests/` – lightweight Node test framework and specs run via `tests/run.js`.
+- `scripts/` – helper scripts such as `lint.js` for style checks.
+- `package.json` – defines `npm test` and `npm run lint` commands.
+- `README.md`, `CONTRIBUTING.md` – documentation for users and contributors.
+
+## 2. Coding Conventions & Style
+- Codebase uses modern JavaScript (ES modules) and Node.js 20+.
+- Keep functions small, DRY and maintainable; refactor when needed.
+- Add or update tests for every feature or bug fix.
+- Avoid trailing whitespace and ensure HTML/JS syntax is valid (`npm run lint`).
+- No formal formatter; follow existing style in the codebase.
+
+## 3. Testing Instructions
+- Execute the full test suite with `npm test`.
+- Tests live in the `tests/` directory and are run with Node via `tests/run.js`.
+- Ensure all tests pass before committing code.
+
+## 4. Linting / Static Checks
+- Run `npm run lint` which executes `node scripts/lint.js`.
+- The linter fails on trailing whitespace and invalid JavaScript syntax inside `index.html`.
+
+## 5. Pull Request & Commit Guidelines
+- Target the `main` branch for all PRs.
+- Use clear, descriptive commit messages (no strict prefix required).
+- Keep PRs focused; ensure `npm test` and `npm run lint` pass before pushing.
+- Update documentation and this AGENTS.md when workflows or commands change.
+
+## 6. CI / Build Steps
+- No automated CI. To preview the site locally, run `python3 -m http.server` and open `http://localhost:8000/index.html`.
+
+## 7. Hierarchical Overrides
+- AGENTS.md files in subdirectories override these rules for their respective scopes.
+
+## 8. Self-Update Policy
+- Re-evaluate this file after every repository change. If new steps or tools are added, open a dedicated `docs-update` PR updating AGENTS.md only.
