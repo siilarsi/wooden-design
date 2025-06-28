@@ -15,9 +15,10 @@
         top: 10px;
         left: 10px;
         z-index: 10;
-        background: rgba(255, 255, 255, 0.8);
-        padding: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 12px;
         border-radius: 4px;
+        max-width: 260px;
       }
       #dropArea {
         border: 2px dashed #888;
@@ -27,6 +28,14 @@
       }
       #dropArea.hover {
         background: #eef;
+      }
+      #fileInput {
+        margin-top: 10px;
+        width: 100%;
+      }
+      #instructions {
+        font-size: 0.9em;
+        margin-bottom: 10px;
       }
       select {
         width: 100%;
@@ -39,6 +48,10 @@
   </head>
   <body>
     <div id="ui">
+      <p id="instructions">
+        Select a plank model and apply your texture using drag &amp; drop or the
+        upload button.
+      </p>
       <label for="modelSelect">Select Model:</label>
       <select id="modelSelect" aria-label="Model selection">
         <option value="models/plank1.gltf">Plank 1</option>
@@ -47,6 +60,12 @@
       <div id="dropArea" aria-label="Drop texture" role="button">
         Drag &amp; Drop Texture Here
       </div>
+      <input
+        type="file"
+        id="fileInput"
+        accept="image/*"
+        aria-label="Upload texture"
+      />
       <label for="finishSelect">Finish:</label>
       <select id="finishSelect" aria-label="Finish presets">
         <option value="custom">Custom</option>
@@ -85,9 +104,13 @@
       if (urlParams.has("clearcoat"))
         params.clearcoat = parseFloat(urlParams.get("clearcoat"));
       if (urlParams.has("clearcoatRoughness"))
-        params.clearcoatRoughness = parseFloat(urlParams.get("clearcoatRoughness"));
+        params.clearcoatRoughness = parseFloat(
+          urlParams.get("clearcoatRoughness"),
+        );
       if (urlParams.has("specularIntensity"))
-        params.specularIntensity = parseFloat(urlParams.get("specularIntensity"));
+        params.specularIntensity = parseFloat(
+          urlParams.get("specularIntensity"),
+        );
       if (urlParams.has("specularColor"))
         params.specularColor = urlParams.get("specularColor");
       if (urlParams.has("sheenColor"))
@@ -136,20 +159,11 @@
         q.set("roughness", params.roughness.toFixed(2));
         q.set("metalness", params.metalness.toFixed(2));
         q.set("clearcoat", params.clearcoat.toFixed(2));
-        q.set(
-          "clearcoatRoughness",
-          params.clearcoatRoughness.toFixed(2),
-        );
-        q.set(
-          "specularIntensity",
-          params.specularIntensity.toFixed(2),
-        );
+        q.set("clearcoatRoughness", params.clearcoatRoughness.toFixed(2));
+        q.set("specularIntensity", params.specularIntensity.toFixed(2));
         q.set("specularColor", params.specularColor);
         q.set("sheenColor", params.sheenColor);
-        q.set(
-          "sheenRoughness",
-          params.sheenRoughness.toFixed(2),
-        );
+        q.set("sheenRoughness", params.sheenRoughness.toFixed(2));
         history.replaceState(null, "", `?${q.toString()}`);
       }
 
@@ -191,39 +205,30 @@
         loadModel(params.model);
       });
 
-      document.getElementById("finishSelect").addEventListener("change", (e) => {
-        params.finish = e.target.value;
-        if (params.finish === "matte") {
-          params.roughness = 0.9;
-          params.metalness = 0.0;
-        } else if (params.finish === "satin") {
-          params.roughness = 0.5;
-          params.metalness = 0.0;
-        } else if (params.finish === "gloss") {
-          params.roughness = 0.1;
-          params.metalness = 0.0;
-        }
-        roughCtrl.setValue(params.roughness);
-        metalCtrl.setValue(params.metalness);
-        updateMaterials();
-      });
+      document
+        .getElementById("finishSelect")
+        .addEventListener("change", (e) => {
+          params.finish = e.target.value;
+          if (params.finish === "matte") {
+            params.roughness = 0.9;
+            params.metalness = 0.0;
+          } else if (params.finish === "satin") {
+            params.roughness = 0.5;
+            params.metalness = 0.0;
+          } else if (params.finish === "gloss") {
+            params.roughness = 0.1;
+            params.metalness = 0.0;
+          }
+          roughCtrl.setValue(params.roughness);
+          metalCtrl.setValue(params.metalness);
+          updateMaterials();
+        });
 
       const textureLoader = new THREE.TextureLoader();
       const dropArea = document.getElementById("dropArea");
-      // Prevent the browser from opening files when dropped outside the drop zone
-      window.addEventListener("dragover", (e) => e.preventDefault());
-      window.addEventListener("drop", (e) => e.preventDefault());
-      dropArea.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        dropArea.classList.add("hover");
-      });
-      dropArea.addEventListener("dragleave", () => {
-        dropArea.classList.remove("hover");
-      });
-      dropArea.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dropArea.classList.remove("hover");
-        const file = e.dataTransfer.files[0];
+      const fileInput = document.getElementById("fileInput");
+
+      function applyTexture(file) {
         if (!file) return;
         const url = URL.createObjectURL(file);
         textureLoader.load(url, (tex) => {
@@ -235,8 +240,40 @@
               }
             });
           }
+          URL.revokeObjectURL(url);
+          updateMaterials();
         });
-        updateMaterials();
+      }
+
+      // Prevent the browser from opening files when dropped outside the drop zone
+      ["dragenter", "dragover", "drop"].forEach((evt) => {
+        window.addEventListener(evt, (e) => {
+          e.preventDefault();
+        });
+      });
+
+      dropArea.addEventListener("dragenter", (e) => {
+        e.preventDefault();
+        dropArea.classList.add("hover");
+      });
+      dropArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropArea.classList.add("hover");
+      });
+      dropArea.addEventListener("dragleave", () => {
+        dropArea.classList.remove("hover");
+      });
+      dropArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropArea.classList.remove("hover");
+        const file = e.dataTransfer.files[0];
+        applyTexture(file);
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        applyTexture(file);
+        fileInput.value = "";
       });
 
       const gui = new GUI();
