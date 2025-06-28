@@ -16,9 +16,16 @@
         left: 10px;
         z-index: 10;
         background: rgba(255, 255, 255, 0.9);
-        padding: 12px;
-        border-radius: 4px;
-        max-width: 260px;
+        padding: 16px;
+        border-radius: 6px;
+        max-width: 300px;
+      }
+      #ui section {
+        margin-bottom: 12px;
+      }
+      #ui h2 {
+        margin: 0 0 4px;
+        font-size: 1em;
       }
       #dropArea {
         border: 2px dashed #888;
@@ -44,6 +51,39 @@
         margin-top: 10px;
         width: 100%;
       }
+      .help {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        text-align: center;
+        border-radius: 50%;
+        background: #007bff;
+        color: #fff;
+        font-size: 12px;
+        margin-left: 4px;
+        cursor: help;
+        position: relative;
+      }
+      .help::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        padding: 6px 8px;
+        border-radius: 4px;
+        white-space: normal;
+        max-width: 220px;
+        font-size: 0.85em;
+        display: none;
+        z-index: 100;
+      }
+      .help:hover::after {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -52,28 +92,41 @@
         Select a plank model and apply your texture using drag &amp; drop or the
         upload button.
       </p>
-      <label for="modelSelect">Select Model:</label>
-      <select id="modelSelect" aria-label="Model selection">
-        <option value="models/plank1.gltf">Plank 1</option>
-        <option value="models/plank2.gltf">Plank 2</option>
-      </select>
-      <div id="dropArea" aria-label="Drop texture" role="button">
-        Drag &amp; Drop Texture Here
-      </div>
-      <input
-        type="file"
-        id="fileInput"
-        accept="image/*"
-        aria-label="Upload texture"
-      />
-      <label for="finishSelect">Finish:</label>
-      <select id="finishSelect" aria-label="Finish presets">
-        <option value="custom">Custom</option>
-        <option value="matte">Matte</option>
-        <option value="satin">Satin</option>
-        <option value="gloss">Gloss</option>
-      </select>
-      <button id="copyLink" aria-label="Copy shareable link">Copy Link</button>
+      <section>
+        <h2>Model<span class="help" data-tooltip="Choose which wood plank geometry to view">?</span></h2>
+        <select id="modelSelect" aria-label="Model selection">
+          <option value="models/plank1.gltf">Plank 1</option>
+          <option value="models/plank2.gltf">Plank 2</option>
+        </select>
+        <span class="help" data-tooltip="Select a predefined 3D plank model to preview">?</span>
+      </section>
+      <section>
+        <h2>Texture<span class="help" data-tooltip="Upload a PNG or JPEG image to use as a texture. It will wrap onto the 3D plank.">?</span></h2>
+        <div id="dropArea" aria-label="Drop texture" role="button">
+          Drag &amp; Drop Texture Here
+        </div>
+        <span class="help" data-tooltip="Drop an image file here and it will immediately show on the plank">?</span>
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+          aria-label="Upload texture"
+        />
+        <span class="help" data-tooltip="Choose an image file (PNG or JPEG) from your computer">?</span>
+      </section>
+      <section>
+        <h2>Finish<span class="help" data-tooltip="Select a preset or keep custom values in the sliders">?</span></h2>
+        <select id="finishSelect" aria-label="Finish presets">
+          <option value="custom">Custom</option>
+          <option value="matte">Matte</option>
+          <option value="satin">Satin</option>
+          <option value="gloss">Gloss</option>
+        </select>
+        <span class="help" data-tooltip="Applies common finish settings to the material">?</span>
+      </section>
+      <button id="copyLink" aria-label="Copy shareable link">
+        Copy Link<span class="help" data-tooltip="Copies a URL with your current settings so you can share your design">?</span>
+      </button>
     </div>
     <script type="module">
       import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js?module";
