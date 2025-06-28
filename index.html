@@ -1,1 +1,105 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wooden Design</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: sans-serif; }
+    #ui { position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 4px; }
+    #dropArea { border: 2px dashed #888; padding: 20px; text-align: center; margin-top: 10px; }
+    #dropArea.hover { background: #eef; }
+    select { width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <label for="modelSelect">Select Model:</label>
+    <select id="modelSelect">
+      <option value="models/plank1.gltf">Plank 1</option>
+      <option value="models/plank2.gltf">Plank 2</option>
+    </select>
+    <div id="dropArea">Drag &amp; Drop Texture Here</div>
+  </div>
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
+    import { GLTFLoader } from 'https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+
+    let scene, camera, renderer, controls, model;
+
+    init();
+    loadModel(document.getElementById('modelSelect').value);
+
+    function init() {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xaaaaaa);
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 2, 5);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      controls = new OrbitControls(camera, renderer.domElement);
+
+      const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+      scene.add(light);
+
+      window.addEventListener('resize', onWindowResize);
+      animate();
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function loadModel(path) {
+      const loader = new GLTFLoader();
+      loader.load(path, (gltf) => {
+        if (model) {
+          scene.remove(model);
+        }
+        model = gltf.scene;
+        scene.add(model);
+      });
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+
+    document.getElementById('modelSelect').addEventListener('change', (e) => {
+      loadModel(e.target.value);
+    });
+
+    const textureLoader = new THREE.TextureLoader();
+    const dropArea = document.getElementById('dropArea');
+    dropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropArea.classList.add('hover');
+    });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('hover'));
+    dropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropArea.classList.remove('hover');
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      textureLoader.load(url, (tex) => {
+        if (model) {
+          model.traverse((child) => {
+            if (child.isMesh) {
+              child.material.map = tex;
+              child.material.needsUpdate = true;
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
