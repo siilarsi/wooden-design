@@ -76,9 +76,10 @@
       <button id="copyLink" aria-label="Copy shareable link">Copy Link</button>
     </div>
     <script type="module">
-      import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js";
-        import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js?module";
-        import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js?module";
+      import * as THREE from "https://unpkg.com/three@0.158.0/build/three.module.js?module";
+      import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js?module";
+      import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js?module";
+      import { buildQuery, debounce } from "./src/utils.js";
       import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
       let scene, camera, renderer, controls, model;
@@ -152,20 +153,20 @@
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
-
-      function updateURL() {
-        const q = new URLSearchParams();
-        q.set("model", params.model);
-        q.set("roughness", params.roughness.toFixed(2));
-        q.set("metalness", params.metalness.toFixed(2));
-        q.set("clearcoat", params.clearcoat.toFixed(2));
-        q.set("clearcoatRoughness", params.clearcoatRoughness.toFixed(2));
-        q.set("specularIntensity", params.specularIntensity.toFixed(2));
-        q.set("specularColor", params.specularColor);
-        q.set("sheenColor", params.sheenColor);
-        q.set("sheenRoughness", params.sheenRoughness.toFixed(2));
-        history.replaceState(null, "", `?${q.toString()}`);
-      }
+      const updateURL = debounce(() => {
+        const q = buildQuery({
+          model: params.model,
+          roughness: params.roughness,
+          metalness: params.metalness,
+          clearcoat: params.clearcoat,
+          clearcoatRoughness: params.clearcoatRoughness,
+          specularIntensity: params.specularIntensity,
+          specularColor: params.specularColor,
+          sheenColor: params.sheenColor,
+          sheenRoughness: params.sheenRoughness,
+        });
+        history.replaceState(null, "", `?${q}`);
+      }, 200);
 
       function loadModel(path) {
         const loader = new GLTFLoader();
