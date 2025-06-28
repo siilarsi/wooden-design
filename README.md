@@ -35,3 +35,16 @@ Use the sliders to tweak roughness and metalness in real time. Click **Copy Link
 Newer builds expose additional controls for specular tint and sheen. Adjust the
 specular intensity and color to tune highlights, and modify the sheen color and
 roughness for velvet-like finishes.
+
+## Local Development
+
+The demo must be served via HTTP because browsers restrict file-based module
+loading and requests due to CORS policies. Start a simple server in this
+directory with:
+
+```bash
+python3 -m http.server
+```
+
+Once the server is running, open
+<http://localhost:8000/index.html> in your browser.
