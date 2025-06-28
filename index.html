@@ -12,18 +12,19 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(#d9dee8, #f3f4f8);
+        background: linear-gradient(135deg, #cfd8e3, #f7f9fc);
       }
       #ui {
         position: absolute;
         top: 10px;
         left: 10px;
         z-index: 10;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(4px);
         padding: 16px;
         border-radius: 8px;
         max-width: 300px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       #ui section {
         margin-bottom: 12px;
@@ -35,12 +36,12 @@
       #viewer {
         width: 80vw;
         height: 80vh;
-        border: 2px solid #444;
+        border: 1px solid #555;
         box-sizing: border-box;
         position: relative;
-        border-radius: 8px;
+        border-radius: 10px;
         background: #fff;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
       }
       #eventViewer {
         width: 80vw;
@@ -62,15 +63,13 @@
         padding: 20px;
         text-align: center;
         margin-top: 10px;
-        border-radius: 4px;
-        transition: background 0.3s;
+        border-radius: 6px;
+        transition: background 0.3s, border-color 0.3s;
+        background: rgba(255, 255, 255, 0.6);
       }
       #dropArea.hover {
         background: #eef;
-      }
-      #fileInput {
-        margin-top: 10px;
-        width: 100%;
+        border-color: #555;
       }
       #instructions {
         font-size: 0.9em;
@@ -89,6 +88,7 @@
         color: #fff;
         cursor: pointer;
         font-size: 1em;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
       button:hover {
         background: #0056b3;
@@ -136,9 +136,8 @@
     </details>
     <div id="ui">
       <p id="instructions">
-        Select a plank model and apply your texture using drag &amp; drop or the
-        <strong>Upload</strong> button. Detailed loading logs are shown in the
-        browser console.
+        Select a plank model and apply your texture using drag &amp; drop in the
+        box below. Detailed loading logs are shown in the browser console.
       </p>
       <section>
         <h2>Model<span class="help" data-tooltip="Choose which wood plank geometry to view">?</span></h2>
@@ -157,13 +156,6 @@
           Drag &amp; Drop Texture Here
         </div>
         <span class="help" data-tooltip="Drop an image file here and it will immediately show on the plank">?</span>
-        <input
-          type="file"
-          id="fileInput"
-          accept="image/*"
-          aria-label="Upload texture"
-        />
-        <span class="help" data-tooltip="Choose an image file (PNG or JPEG) from your computer">?</span>
       </section>
       <section>
         <h2>Finish<span class="help" data-tooltip="Select a preset or keep custom values in the sliders">?</span></h2>
@@ -203,6 +195,8 @@
       }
 
       logEvent('Wooden Design viewer initialized');
+      logEvent('THREE revision ' + THREE.REVISION);
+      logEvent('GLTFLoader available: ' + (typeof GLTFLoader === 'function'));
 
       let scene, camera, renderer, controls, model;
       const params = {
@@ -273,6 +267,14 @@
         logEvent('WebGL version: ' + (renderer.capabilities.isWebGL2 ? 'WebGL2' : 'WebGL1'));
 
         controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.screenSpacePanning = true;
+        controls.mouseButtons = {
+          LEFT: THREE.MOUSE.PAN,
+          MIDDLE: THREE.MOUSE.DOLLY,
+          RIGHT: THREE.MOUSE.ROTATE,
+        };
         controls.update();
         logEvent('Camera initialized at ' + camera.position.toArray().join(', '));
 
@@ -370,6 +372,7 @@
 
       function animate() {
         requestAnimationFrame(animate);
+        controls.update();
         renderer.render(scene, camera);
       }
 
@@ -399,7 +402,9 @@
 
       const textureLoader = new THREE.TextureLoader();
       const dropArea = document.getElementById("dropArea");
-      const fileInput = document.getElementById("fileInput");
+
+      let lastTextureName = '';
+      dropArea.textContent = 'Drag & Drop Texture Here';
 
       function applyTexture(file) {
         if (!file) return;
@@ -418,6 +423,8 @@
             }
             URL.revokeObjectURL(url);
             updateMaterials();
+            lastTextureName = file.name;
+            dropArea.textContent = file.name;
             logEvent('Texture applied to model');
           },
           undefined,
@@ -451,12 +458,6 @@
         dropArea.classList.remove("hover");
         const file = e.dataTransfer.files[0];
         applyTexture(file);
-      });
-
-      fileInput.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        applyTexture(file);
-        fileInput.value = "";
       });
 
       const gui = new GUI();
