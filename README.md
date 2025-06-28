@@ -27,8 +27,8 @@ This project aims to provide a web-based tool for designing wooden materials wit
 ## Getting Started
 
 Open `index.html` in a modern browser. Use the dropdown to switch between sample plank models.
-You can drag and drop an image onto the drop zone or use the **Upload Texture**
-button to load your own wood texture.
+You can drag and drop an image onto the drop zone or, as an alternative,
+use the **Upload Texture** button to load your own wood texture.
 
 Use the sliders to tweak roughness and metalness in real time. Click **Copy Link** to share your current design via the encoded URL parameters.
 
@@ -48,3 +48,7 @@ python3 -m http.server
 
 Once the server is running, open
 <http://localhost:8000/index.html> in your browser.
+
+Open your browser's developer console to view helpful logs when models or
+textures are loaded. If something fails to appear, these logs can help you
+troubleshoot issues.
