@@ -1,0 +1,14 @@
+{
+  "name": "wooden-design",
+  "version": "1.0.0",
+  "description": "This project aims to provide a web-based tool for designing wooden materials with realistic textures and lighting. The following requirements summarize the desired features and constraints.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/run.js",
+    "lint": "node scripts/lint.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
