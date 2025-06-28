@@ -97,7 +97,10 @@
     <div id="ui">
       <p id="instructions">
         Select a plank model and apply your texture using drag &amp; drop or the
-        upload button.
+        <strong>Upload</strong> button. If nothing appears, run
+        <code>python3 -m http.server</code> in this folder and open
+        <code>http://localhost:8000/index.html</code>. Open the developer
+        console for detailed loading logs.
       </p>
       <section>
         <h2>Model<span class="help" data-tooltip="Choose which wood plank geometry to view">?</span></h2>
@@ -141,6 +144,8 @@
       import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js?module";
       import { buildQuery, debounce } from "./src/utils.js";
       import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
+
+      console.log('Wooden Design viewer initialized');
 
       let scene, camera, renderer, controls, model;
       const params = {
@@ -242,32 +247,42 @@
 
       function loadModel(path) {
         const loader = new GLTFLoader();
-        loader.load(path, (gltf) => {
-          if (model) {
-            scene.remove(model);
-          }
-          model = gltf.scene;
-          model.traverse((child) => {
-            if (child.isMesh) {
-              const mat = new THREE.MeshPhysicalMaterial({
-                map: child.material.map,
-                roughness: params.roughness,
-                metalness: params.metalness,
-                clearcoat: params.clearcoat,
-                clearcoatRoughness: params.clearcoatRoughness,
-                specularIntensity: params.specularIntensity,
-                specularColor: new THREE.Color(params.specularColor),
-               sheenColor: new THREE.Color(params.sheenColor),
-               sheenRoughness: params.sheenRoughness,
-                anisotropy: params.anisotropy,
-                anisotropyRotation: params.anisotropyRotation,
-              });
-              child.material = mat;
+        console.log('Loading model', path);
+        loader.load(
+          path,
+          (gltf) => {
+            if (model) {
+              scene.remove(model);
             }
-          });
-          scene.add(model);
-          updateURL();
-        });
+            model = gltf.scene;
+            model.traverse((child) => {
+              if (child.isMesh) {
+                const mat = new THREE.MeshPhysicalMaterial({
+                  map: child.material.map,
+                  roughness: params.roughness,
+                  metalness: params.metalness,
+                  clearcoat: params.clearcoat,
+                  clearcoatRoughness: params.clearcoatRoughness,
+                  specularIntensity: params.specularIntensity,
+                  specularColor: new THREE.Color(params.specularColor),
+                 sheenColor: new THREE.Color(params.sheenColor),
+                 sheenRoughness: params.sheenRoughness,
+                  anisotropy: params.anisotropy,
+                  anisotropyRotation: params.anisotropyRotation,
+                });
+                child.material = mat;
+              }
+            });
+            scene.add(model);
+            updateURL();
+            console.log('Model loaded');
+          },
+          undefined,
+          (err) => {
+            console.error('Failed to load model', err);
+          },
+        );
+      }
       }
 
       function animate() {
@@ -306,18 +321,27 @@
       function applyTexture(file) {
         if (!file) return;
         const url = URL.createObjectURL(file);
-        textureLoader.load(url, (tex) => {
-          if (model) {
-            model.traverse((child) => {
-              if (child.isMesh) {
-                child.material.map = tex;
-                child.material.needsUpdate = true;
-              }
-            });
-          }
-          URL.revokeObjectURL(url);
-          updateMaterials();
-        });
+        console.log('Loading texture', file.name);
+        textureLoader.load(
+          url,
+          (tex) => {
+            if (model) {
+              model.traverse((child) => {
+                if (child.isMesh) {
+                  child.material.map = tex;
+                  child.material.needsUpdate = true;
+                }
+              });
+            }
+            URL.revokeObjectURL(url);
+            updateMaterials();
+            console.log('Texture applied');
+          },
+          undefined,
+          (err) => {
+            console.error('Failed to load texture', err);
+          },
+        );
       }
 
       // Prevent the browser from opening files when dropped outside the drop zone
