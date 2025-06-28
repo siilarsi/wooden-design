@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wooden Design</title>
     <style>
+      * {-webkit-user-select: none; user-select: none;}
       body {
         margin: 0;
         overflow: hidden;
@@ -13,6 +14,8 @@
         justify-content: center;
         align-items: center;
         background: linear-gradient(135deg, #cfd8e3, #f7f9fc);
+        -webkit-user-select: none;
+        user-select: none;
       }
       #ui {
         position: absolute;
@@ -172,6 +175,7 @@
         <div id="dropArea" aria-label="Drop texture" role="button">
           Drag &amp; Drop Texture Here
         </div>
+        <input id="textureInput" type="file" accept="image/*" style="display:none" />
         <span class="help" data-tooltip="Drop an image file here and it will immediately show on the plank">?</span>
       </section>
       <section>
@@ -214,6 +218,10 @@
       logEvent('Wooden Design viewer initialized');
       logEvent('THREE revision ' + THREE.REVISION);
       logEvent('GLTFLoader available: ' + (typeof GLTFLoader === 'function'));
+
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+      });
 
       let scene, camera, renderer, controls, model;
       const params = {
@@ -344,6 +352,7 @@
             anisotropy: params.anisotropy,
             anisotropyRotation: params.anisotropyRotation,
             side: THREE.DoubleSide,
+            map: currentTexture || null,
           });
           model = new THREE.Mesh(geometry, material);
           scene.add(model);
@@ -361,7 +370,7 @@
             model.traverse((child) => {
               if (child.isMesh) {
                 const mat = new THREE.MeshPhysicalMaterial({
-                  map: child.material.map,
+                  map: currentTexture || child.material.map,
                   roughness: params.roughness,
                   metalness: params.metalness,
                   clearcoat: params.clearcoat,
@@ -421,8 +430,10 @@
 
       const textureLoader = new THREE.TextureLoader();
       const dropArea = document.getElementById("dropArea");
+      const fileInput = document.getElementById("textureInput");
 
       let lastTextureName = '';
+      let currentTexture = null;
       dropArea.textContent = 'Drag & Drop Texture Here';
 
       function applyTexture(file) {
@@ -440,6 +451,7 @@
                 }
               });
             }
+            currentTexture = tex;
             URL.revokeObjectURL(url);
             updateMaterials();
             lastTextureName = file.name;
@@ -477,6 +489,17 @@
         dropArea.classList.remove("hover");
         const file = e.dataTransfer.files[0];
         applyTexture(file);
+      });
+
+      dropArea.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        applyTexture(file);
+        fileInput.value = "";
       });
 
       const gui = new GUI();
@@ -562,6 +585,7 @@
       let startY = 0;
       let startH = 0;
       evSummary.addEventListener('mousedown', (e) => {
+        e.preventDefault();
         startY = e.clientY;
         startH = ev.offsetHeight;
         document.body.style.userSelect = 'none';
