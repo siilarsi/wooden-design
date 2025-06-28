@@ -7,7 +7,7 @@ This project aims to provide a web-based tool for designing wooden materials wit
 - **Texture Input**: Users can select wood-plank models from a built-in library or drag-and-drop custom textures in glTF format.
 - **Optical Property Controls**: Real-time adjustment of PBR parameters including roughness, metalness/specular tint, anisotropy, and sheen/clear-coat. Preset finishes (matte, satin, gloss) are available.
 - **3D Preview Canvas**: A WebGL viewport with orbit controls and HDR lighting renders the wood model responsively on desktop and mobile.
-- **State Persistence & Sharing**: Design settings are encoded in the URL for easy sharing with a "Copy link" button.
+- **State Persistence & Sharing**: Design settings are encoded in the URL for easy sharing via the page address.
 - **User Interface**: Clean, utility-first styling with a sidebar or floating panel for controls.
 
 ## Non-Functional Requirements
@@ -30,7 +30,7 @@ Open `index.html` in a modern browser. Use the dropdown to switch between sample
 You can drag and drop an image onto the drop zone or, as an alternative,
 use the **Upload Texture** button to load your own wood texture.
 
-Use the sliders to tweak roughness and metalness in real time. Click **Copy Link** to share your current design via the encoded URL parameters.
+Use the sliders to tweak roughness and metalness in real time. Share your current design by copying the page URL, which encodes all parameters.
 
 Newer builds expose additional controls for specular tint and sheen. Adjust the
 specular intensity and color to tune highlights, and modify the sheen color and

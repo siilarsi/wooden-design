@@ -188,9 +188,6 @@
         </select>
         <span class="help" data-tooltip="Applies common finish settings to the material">?</span>
       </section>
-      <button id="copyLink" aria-label="Copy shareable link">
-        Copy Link<span class="help" data-tooltip="Copies a URL with your current settings so you can share your design">?</span>
-      </button>
     </div>
     <script type="importmap">
       {
@@ -567,18 +564,6 @@
           }
           updateURL();
         }
-
-      document
-        .getElementById("copyLink")
-        .addEventListener("click", async () => {
-          updateURL();
-          try {
-            await navigator.clipboard.writeText(window.location.href);
-            alert("Link copied to clipboard");
-          } catch (err) {
-            console.error(err);
-          }
-        });
 
       const ev = document.getElementById('eventViewer');
       const evSummary = ev.querySelector('summary');
