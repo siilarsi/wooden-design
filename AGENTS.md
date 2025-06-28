@@ -1,8 +1,8 @@
 # Project Guidelines
 
 ## 1. Project Structure & Navigation
-- `index.html` – standalone static page with viewer logic.
-- `src/` – JavaScript modules used by the viewer (`utils.js`).
+- `src/main.js and index.html` – static page loading the viewer module.
+- `src/` – JavaScript modules (`main.js`, `utils.js`) used by the viewer.
 - `models/` – sample `.gltf` models used in tests and the demo.
 - `tests/` – lightweight Node test framework and specs run via `tests/run.js`.
 - `scripts/` – helper scripts such as `lint.js` for style checks.
@@ -23,7 +23,7 @@
 
 ## 4. Linting / Static Checks
 - Run `npm run lint` which executes `node scripts/lint.js`.
-- The linter fails on trailing whitespace and invalid JavaScript syntax inside `index.html`.
+- The linter fails on trailing whitespace and invalid JavaScript syntax inside `src/main.js and index.html`.
 
 ## 5. Pull Request & Commit Guidelines
 - Target the `main` branch for all PRs.
@@ -32,7 +32,7 @@
 - Update documentation and this AGENTS.md when workflows or commands change.
 
 ## 6. CI / Build Steps
-- No automated CI. To preview the site locally, run `python3 -m http.server` and open `http://localhost:8000/index.html`.
+- No automated CI. To preview the site locally, run `python3 -m http.server` and open `http://localhost:8000/src/main.js and index.html`.
 
 ## 7. Hierarchical Overrides
 - AGENTS.md files in subdirectories override these rules for their respective scopes.

@@ -14,21 +14,16 @@ function checkFile(path) {
 }
 
 function checkScriptSyntax() {
-  const html = fs.readFileSync('index.html', 'utf8');
-  const match = html.match(/<script type="module">([\s\S]*?)<\/script>/);
-  if (match) {
-    const res = spawnSync(process.execPath, ['--input-type=module', '--check', '-'], {
-      input: match[1],
-      encoding: 'utf8'
-    });
-    if (res.status !== 0) {
-      console.error('index.html:', res.stderr.trim());
-      hasError = true;
-    }
+  const script = fs.readFileSync('src/main.js', 'utf8');
+  const res = spawnSync(process.execPath, ['--check', 'src/main.js']);
+  if (res.status !== 0) {
+    console.error('src/main.js:', res.stderr.trim());
+    hasError = true;
   }
 }
 
 checkFile('src/utils.js');
+checkFile('src/main.js');
 checkFile('index.html');
 checkScriptSyntax();
 

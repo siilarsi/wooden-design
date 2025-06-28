@@ -30,4 +30,9 @@ describe('viewer container', () => {
     const regex = /#eventViewer\s*{[^}]*max-height:/;
     expect(regex.test(html)).toEqual(false);
   });
+
+  it('loads viewer module via script tag', () => {
+    const regex = /<script type="module" src="\.\/src\/main.js"><\/script>/;
+    expect(regex.test(html)).toEqual(true);
+  });
 });

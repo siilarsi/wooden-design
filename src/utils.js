@@ -17,3 +17,12 @@ export function debounce(fn, delay) {
     t = setTimeout(() => fn(...args), delay);
   };
 }
+export function logEvent(msg) {
+  const box = document.getElementById("eventLog");
+  const div = document.createElement("div");
+  div.textContent = msg;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  console.log("[Viewer]", msg);
+}
+
