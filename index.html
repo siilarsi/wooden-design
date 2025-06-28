@@ -221,6 +221,8 @@
       });
 
       let scene, camera, renderer, controls, model;
+      let lastTextureName = '';
+      let currentTexture = null;
       const params = {
         model: "models/plank1.gltf",
         roughness: 0.5,
@@ -429,8 +431,6 @@
       const dropArea = document.getElementById("dropArea");
       const fileInput = document.getElementById("textureInput");
 
-      let lastTextureName = '';
-      let currentTexture = null;
       dropArea.textContent = 'Drag & Drop Texture Here';
 
       function applyTexture(file) {
