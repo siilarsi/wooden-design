@@ -22,6 +22,7 @@ body {
   position: absolute;
   width: 280px;
   font-family: ui-monospace, SFMono-Regular, Menlo, 'Roboto Mono', monospace;
+  font-size: 11px;
   color: #fefefe;
   background: #292d39;
   box-shadow: 0 0 9px 0 #00000088;
@@ -47,6 +48,33 @@ body {
   padding: 10px;
 }
 
+.panel select,
+.panel input,
+.panel button {
+  font: inherit;
+  color: #fefefe;
+  background: #373c4b;
+  border: 1px solid #535760;
+  border-radius: 3px;
+  padding: 4px;
+}
+
+.panel select:focus,
+.panel input:focus,
+.panel button:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.panel button {
+  background: #007bff;
+  cursor: pointer;
+}
+
+.panel button:hover {
+  background: #3c93ff;
+}
+
 .collapsed .panel-body {
   display: none;
 }
@@ -58,10 +86,11 @@ body {
 }
 
 #dropArea {
-  border: 2px dashed #888;
+  border: 1px dashed #535760;
   padding: 20px;
   border-radius: 4px;
-  background: #fff;
+  background: #373c4b;
+  color: #fefefe;
   cursor: pointer;
   text-align: center;
 }
