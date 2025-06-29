@@ -18,10 +18,10 @@
     "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@react-three/fiber": "9.7.5",
-    "@react-three/drei": "9.99.7",
+    "@react-three/fiber": "8.17.12",
+    "@react-three/drei": "9.122.0",
     "zustand": "4.3.9",
-    "leva": "0.9.37"
+    "leva": "0.9.36"
   },
   "devDependencies": {
     "typescript": "5.2.2",
