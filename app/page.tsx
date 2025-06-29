@@ -48,64 +48,64 @@ export default function Page() {
       min: 0,
       max: 1,
       step: 0.01,
-      onChange: (v: number) => set({ roughness: v }),
+      onChange: (v: number) => set({ roughness: v, finish: 'custom' }),
     },
     metalness: {
       value: metalness,
       min: 0,
       max: 1,
       step: 0.01,
-      onChange: (v: number) => set({ metalness: v }),
+      onChange: (v: number) => set({ metalness: v, finish: 'custom' }),
     },
     clearcoat: {
       value: clearcoat,
       min: 0,
       max: 1,
       step: 0.01,
-      onChange: (v: number) => set({ clearcoat: v }),
+      onChange: (v: number) => set({ clearcoat: v, finish: 'custom' }),
     },
     clearcoatRoughness: {
       value: clearcoatRoughness,
       min: 0,
       max: 1,
       step: 0.01,
-      onChange: (v: number) => set({ clearcoatRoughness: v }),
+      onChange: (v: number) => set({ clearcoatRoughness: v, finish: 'custom' }),
     },
     specularIntensity: {
       value: specularIntensity,
       min: 0,
       max: 2,
       step: 0.01,
-      onChange: (v: number) => set({ specularIntensity: v }),
+      onChange: (v: number) => set({ specularIntensity: v, finish: 'custom' }),
     },
     specularColor: {
       value: specularColor,
-      onChange: (v: string) => set({ specularColor: v }),
+      onChange: (v: string) => set({ specularColor: v, finish: 'custom' }),
     },
     sheenColor: {
       value: sheenColor,
-      onChange: (v: string) => set({ sheenColor: v }),
+      onChange: (v: string) => set({ sheenColor: v, finish: 'custom' }),
     },
     sheenRoughness: {
       value: sheenRoughness,
       min: 0,
       max: 1,
       step: 0.01,
-      onChange: (v: number) => set({ sheenRoughness: v }),
+      onChange: (v: number) => set({ sheenRoughness: v, finish: 'custom' }),
     },
     anisotropy: {
       value: anisotropy,
       min: 0,
       max: 1,
       step: 0.01,
-      onChange: (v: number) => set({ anisotropy: v }),
+      onChange: (v: number) => set({ anisotropy: v, finish: 'custom' }),
     },
     anisotropyRotation: {
       value: anisotropyRotation,
       min: 0,
       max: Math.PI * 2,
       step: 0.01,
-      onChange: (v: number) => set({ anisotropyRotation: v }),
+      onChange: (v: number) => set({ anisotropyRotation: v, finish: 'custom' }),
     },
   }));
 
@@ -129,7 +129,7 @@ export default function Page() {
       <Panel id="ui" title="">
         <section className="option-row">
           <label htmlFor="modelSelect" className="option-label">
-            Model
+            model
           </label>
           <select
             id="modelSelect"
@@ -145,7 +145,7 @@ export default function Page() {
         </section>
         <section className="option-row">
           <label htmlFor="finishSelect" className="option-label">
-            Finish
+            finish
           </label>
           <FinishSelect value={finish} onChange={(v) => set({ finish: v })} />
         </section>

@@ -25,7 +25,7 @@ export default function DropZone({ onFile }: Props) {
       }}
       onClick={() => inputRef.current?.click()}
     >
-      Drag & Drop Texture Here
+      drag & drop texture here
       <input
         ref={inputRef}
         type="file"
