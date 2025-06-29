@@ -30,16 +30,30 @@ body {
 }
 
 .panel-title {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 4px 8px;
   background: #292d39;
   user-select: none;
-  cursor: move;
+}
+
+.collapse-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
 }
 
 .drag-dots {
-  margin-right: 6px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   cursor: grab;
 }
 
@@ -119,6 +133,19 @@ body {
   overflow-y: auto;
 }
 
-#paramHelp {
-  max-width: 400px;
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.option-label {
+  font-size: 11px;
+  color: #fefefe;
+  font-family: inherit;
+}
+
+.option-row select {
+  margin-left: auto;
 }
