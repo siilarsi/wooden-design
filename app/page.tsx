@@ -42,7 +42,7 @@ export default function Page() {
     history.replaceState(null, '', '?' + q);
   }, [model, finish]);
 
-  useControls({
+  const [, setCtrl] = useControls(() => ({
     roughness: {
       value: roughness,
       min: 0,
@@ -107,7 +107,20 @@ export default function Page() {
       step: 0.01,
       onChange: (v: number) => set({ anisotropyRotation: v }),
     },
-  });
+  }));
+
+  useEffect(() => {
+    if (finish === 'matte') {
+      set({ roughness: 0.9, metalness: 0 });
+      setCtrl({ roughness: 0.9, metalness: 0 });
+    } else if (finish === 'satin') {
+      set({ roughness: 0.5, metalness: 0 });
+      setCtrl({ roughness: 0.5, metalness: 0 });
+    } else if (finish === 'gloss') {
+      set({ roughness: 0.1, metalness: 0 });
+      setCtrl({ roughness: 0.1, metalness: 0 });
+    }
+  }, [finish, set, setCtrl]);
 
   return (
     <div>
