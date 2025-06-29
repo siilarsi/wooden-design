@@ -4,7 +4,6 @@ import Viewer from '../components/Viewer';
 import DropZone from '../components/DropZone';
 import FinishSelect from '../components/FinishSelect';
 import EventLog from '../components/EventLog';
-import ParamHelp from '../components/ParamHelp';
 import Panel from '../components/Panel';
 import { buildQuery } from '../src/utils.js';
 import { useMaterialStore } from '../src/state';
@@ -115,8 +114,10 @@ export default function Page() {
       <Viewer />
       <Leva collapsed />
       <Panel id="ui" title="Settings">
-        <section>
-          <h2>Model</h2>
+        <section className="option-row">
+          <label htmlFor="modelSelect" className="option-label">
+            Model
+          </label>
           <select
             id="modelSelect"
             value={model}
@@ -129,20 +130,18 @@ export default function Page() {
             <option value="cylinder">Cylinder</option>
           </select>
         </section>
-        <section>
-          <h2>Texture</h2>
-          <DropZone
-            onFile={(f) => {
-              set({ texture: URL.createObjectURL(f) });
-              logEvent('Loaded texture ' + f.name);
-            }}
-          />
-        </section>
-        <section>
-          <h2>Finish</h2>
+        <section className="option-row">
+          <label htmlFor="finishSelect" className="option-label">
+            Finish
+          </label>
           <FinishSelect value={finish} onChange={(v) => set({ finish: v })} />
         </section>
-        <ParamHelp />
+        <DropZone
+          onFile={(f) => {
+            set({ texture: URL.createObjectURL(f) });
+            logEvent('Loaded texture ' + f.name);
+          }}
+        />
       </Panel>
       <EventLog events={events} />
     </div>

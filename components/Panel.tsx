@@ -12,7 +12,7 @@ export default function Panel({ id, title, children }: PanelProps) {
   const start = useRef<{ x: number; y: number } | null>(null);
 
   const onMouseDown = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    (e: React.MouseEvent<HTMLSpanElement>) => {
       start.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
       const onMove = (ev: MouseEvent) => {
         if (!start.current) return;
@@ -38,9 +38,17 @@ export default function Panel({ id, title, children }: PanelProps) {
       className={`panel${collapsed ? ' collapsed' : ''}`}
       style={{ left: pos.x, top: pos.y }}
     >
-      <div className="panel-title" onMouseDown={onMouseDown}>
-        <span className="drag-dots">•••••</span>
-        <button onClick={() => setCollapsed(!collapsed)}>{title}</button>
+      <div className="panel-title">
+        <button
+          className="collapse-btn"
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          <span className="collapse-icon">{collapsed ? '▸' : '▾'}</span>
+          {title}
+        </button>
+        <span className="drag-dots" onMouseDown={onMouseDown}>
+          ⋮⋮
+        </span>
       </div>
       <div className="panel-body">{children}</div>
     </div>
