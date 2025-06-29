@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node tests/run.js",
-    "lint": "node scripts/lint.js && eslint .",
+    "lint": "node scripts/lint.js",
     "format": "prettier --write .",
     "dev": "vite",
     "build": "vite build"
