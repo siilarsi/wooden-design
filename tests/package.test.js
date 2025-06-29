@@ -12,6 +12,6 @@ describe('package config', () => {
   });
 
   it('pins drei to a published version', () => {
-    expect(pkg.dependencies['@react-three/drei']).toEqual('9.86.6');
+    expect(pkg.dependencies['@react-three/drei']).toEqual('0.9.7');
   });
 });
