@@ -4,6 +4,7 @@ import Viewer from '../components/Viewer';
 import DropZone from '../components/DropZone';
 import FinishSelect from '../components/FinishSelect';
 import EventLog from '../components/EventLog';
+import ParamHelp from '../components/ParamHelp';
 import { buildQuery } from '../src/utils.js';
 import { useMaterialStore } from '../src/state';
 import { Leva, useControls } from 'leva';
@@ -115,7 +116,11 @@ export default function Page() {
       <div id="ui">
         <section>
           <h2>Model</h2>
-          <select id="modelSelect" value={model} onChange={(e) => set({ model: e.target.value })}>
+          <select
+            id="modelSelect"
+            value={model}
+            onChange={(e) => set({ model: e.target.value })}
+          >
             <option value="models/plank1.gltf">Plank 1</option>
             <option value="models/plank2.gltf">Plank 2</option>
             <option value="cube">Cube</option>
@@ -131,6 +136,7 @@ export default function Page() {
           <h2>Finish</h2>
           <FinishSelect value={finish} onChange={(v) => set({ finish: v })} />
         </section>
+        <ParamHelp />
       </div>
       <EventLog events={events} />
     </div>
