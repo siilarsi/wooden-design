@@ -7,15 +7,42 @@ body {
 
 #ui {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.panel {
+  position: absolute;
+  width: 280px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, 'Roboto Mono', monospace;
+  color: #fefefe;
+  background: #292d39;
+  box-shadow: 0 0 9px 0 #00000088;
+  border-radius: 10px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  background: #292d39;
+  user-select: none;
+  cursor: move;
+}
+
+.drag-dots {
+  margin-right: 6px;
+  cursor: grab;
+}
+
+.panel-body {
+  background: #181c20;
   padding: 10px;
-  max-width: 300px;
-  background: rgba(255, 255, 255, 0.9);
-  z-index: 1;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-bottom-right-radius: 4px;
+}
+
+.collapsed .panel-body {
+  display: none;
 }
 
 .viewerCanvas {
