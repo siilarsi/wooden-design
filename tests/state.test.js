@@ -1,11 +1,23 @@
 import fs from 'fs';
-import ts from 'typescript';
+import transpile from '../scripts/transpile.js';
 import vm from 'vm';
 import { createRequire } from 'module';
 
 const code = fs.readFileSync('src/state.ts', 'utf8');
-const js = ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
-const context = { module: { exports: {} }, exports: {}, require: createRequire(import.meta.url) };
+const js = transpile(code);
+const realRequire = createRequire(import.meta.url);
+const fakeRequire = (id) => {
+  if (id === 'zustand') {
+    return (init) => {
+      const state = {};
+      const set = (v) => Object.assign(state, v);
+      Object.assign(state, init(set));
+      return { getState: () => state };
+    };
+  }
+  return realRequire(id);
+};
+const context = { module: { exports: {} }, exports: {}, require: fakeRequire };
 vm.runInNewContext(js, context);
 const { useMaterialStore } = context.module.exports;
 

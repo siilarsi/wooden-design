@@ -20,7 +20,9 @@
 ## 3. Testing Instructions
 - Execute the full test suite with `npm test`.
 - Tests live in the `tests/` directory and are run with Node via `tests/run.js`.
-- Ensure all tests pass before committing code.
+- Use the helper script `scripts/commit.sh` when committing. It runs
+  `npm test` and `npm run lint` and aborts the commit if either fails.
+- Ensure all tests pass before pushing code.
 
 ## 4. Linting / Static Checks
 - Run `npm run lint` which executes `node scripts/lint.js` followed by ESLint.
@@ -34,6 +36,10 @@
 
 ## 6. CI / Build Steps
 - No automated CI. Run `npm run dev` for local development (Vite) and `npm run build` to produce `dist/` for GitHub Pages.
+
+## 6a. Postmortems
+Document any production issues in `POSTMORTEM.md`. Add a new dated section with
+a summary, root cause, and corrective actions.
 
 ## 7. Hierarchical Overrides
 - AGENTS.md files in subdirectories override these rules for their respective scopes.
