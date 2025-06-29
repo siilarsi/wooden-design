@@ -14,7 +14,8 @@ export default function EventLog({ events }: Props) {
       const startHeight = height;
       const onMove = (ev: MouseEvent) => {
         const diff = startY - ev.clientY;
-        setHeight(Math.max(50, startHeight + diff));
+        const maxHeight = window.innerHeight * 0.5;
+        setHeight(Math.min(maxHeight, Math.max(50, startHeight + diff)));
       };
       const onUp = () => {
         window.removeEventListener('mousemove', onMove);
