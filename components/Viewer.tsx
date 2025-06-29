@@ -105,7 +105,10 @@ function Model() {
 
 export default function Viewer() {
   return (
-    <Canvas className="viewerCanvas">
+    <Canvas
+      className="viewerCanvas"
+      style={{ width: '100vw', height: '100vh', display: 'block' }}
+    >
       <ambientLight intensity={0.8} />
       <Model />
       <OrbitControls makeDefault />
