@@ -36,6 +36,8 @@ body {
   padding: 4px 8px;
   background: #292d39;
   user-select: none;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 .collapse-btn {
@@ -55,6 +57,9 @@ body {
   left: 50%;
   transform: translateX(-50%);
   cursor: grab;
+  fill: #535760;
+  height: 10px;
+  width: 20px;
 }
 
 .panel-body {
@@ -75,17 +80,17 @@ body {
 
 .panel select:focus,
 .panel input:focus,
-.panel button:focus {
+.panel button:not(.collapse-btn):focus {
   outline: none;
   border-color: #007bff;
 }
 
-.panel button {
+.panel button:not(.collapse-btn) {
   background: #007bff;
   cursor: pointer;
 }
 
-.panel button:hover {
+.panel button:not(.collapse-btn):hover {
   background: #3c93ff;
 }
 
