@@ -4,6 +4,7 @@ import './gltf.test.js';
 import './viewer.test.js';
 import './importmap.test.js';
 import './instructions.test.js';
+import "./main-import.test.js";
 import './syntax.test.js';
 import './init-order.test.js';
 import { run } from './test-utils.js';
