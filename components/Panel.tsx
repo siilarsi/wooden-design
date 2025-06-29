@@ -4,9 +4,10 @@ type PanelProps = {
   id?: string;
   title: string;
   children: React.ReactNode;
+  frameless?: boolean;
 };
 
-export default function Panel({ id, title, children }: PanelProps) {
+export default function Panel({ id, title, frameless, children }: PanelProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const start = useRef<{ x: number; y: number } | null>(null);
@@ -35,7 +36,9 @@ export default function Panel({ id, title, children }: PanelProps) {
   return (
     <div
       id={id}
-      className={`panel${collapsed ? ' collapsed' : ''}`}
+      className={`panel${frameless ? ' panel-frameless' : ''}${
+        collapsed ? ' collapsed' : ''
+      }`}
       style={{ left: pos.x, top: pos.y }}
     >
       <div className="panel-title">
