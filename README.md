@@ -33,6 +33,12 @@ npm install
 npm run dev
 ```
 
+When adding or updating dependencies, verify the package version exists using:
+
+```bash
+npm info <name>@<version>
+```
+
 The application uses Vite for development. Run `npm run dev` and open <http://localhost:5173>. Share your current design simply by copying the browser URL, which encodes all parameters.
 
 ## Material Parameters

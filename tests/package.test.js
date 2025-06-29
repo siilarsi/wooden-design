@@ -10,4 +10,8 @@ describe('package config', () => {
   it('defines build script', () => {
     expect(typeof (pkg.scripts && pkg.scripts.build)).toEqual('string');
   });
+
+  it('pins drei to a published version', () => {
+    expect(pkg.dependencies['@react-three/drei']).toEqual('9.86.6');
+  });
 });
