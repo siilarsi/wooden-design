@@ -1,10 +1,13 @@
 import fs from 'fs';
 
-const html = fs.readFileSync('index.html', 'utf8');
+const readme = fs.readFileSync('README.md', 'utf8');
 
 describe('instructions', () => {
-  it('does not mention developer setup', () => {
-    const hasHint = /http\.server/.test(html);
-    expect(hasHint).toEqual(false);
+  it('mentions npm run dev', () => {
+    expect(/npm run dev/.test(readme)).toEqual(true);
+  });
+
+  it('does not mention python http.server', () => {
+    expect(/http\.server/.test(readme)).toEqual(false);
   });
 });

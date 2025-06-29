@@ -1,10 +1,10 @@
 import fs from 'fs';
 
-const script = fs.readFileSync('src/main.js', 'utf8');
+const script = fs.readFileSync('app/page.tsx', 'utf8');
 
-describe('main imports', () => {
-  it('imports utils from same directory', () => {
-    const regex = /from\s+['"]\.\/utils.js['"]/;
+describe('page imports', () => {
+  it('imports utils from src', () => {
+    const regex = /from\s+'\.\.\/src\/utils.js'/;
     expect(regex.test(script)).toEqual(true);
   });
 });
