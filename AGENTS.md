@@ -23,6 +23,8 @@
 - Use the helper script `scripts/commit.sh` when committing. It runs
   `npm test` and `npm run lint` and aborts the commit if either fails.
 - Ensure all tests pass before pushing code.
+- When modifying dependencies, verify the specified version exists with
+  `npm info <name>@<version>` before committing.
 
 ## 4. Linting / Static Checks
 - Run `npm run lint` which executes `node scripts/lint.js` followed by ESLint.
