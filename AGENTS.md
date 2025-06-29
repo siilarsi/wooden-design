@@ -36,8 +36,8 @@
 
 ## 6. CI / Build Steps
 - GitHub Actions builds and deploys the site to GitHub Pages on every push to
-  `main`. The workflow installs dependencies, runs `npm run build`, and
-  publishes the `dist/` directory.
+  `main`. The workflow installs dependencies using Node 20 without caching,
+  runs `npm run build`, and publishes the `dist/` directory.
 - Run `npm run dev` for local development. Do not commit files from `dist/`.
 
 ## 6a. Postmortems
