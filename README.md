@@ -26,29 +26,23 @@ This project aims to provide a web-based tool for designing wooden materials wit
 
 ## Getting Started
 
-Open `index.html` in a modern browser. Use the dropdown to switch between sample plank models.
-You can drag and drop an image onto the drop zone or, as an alternative,
-use the **Upload Texture** button to load your own wood texture.
-
-Use the sliders to tweak roughness and metalness in real time. Share your current design by copying the page URL, which encodes all parameters.
-
-Newer builds expose additional controls for specular tint and sheen. Adjust the
-specular intensity and color to tune highlights, and modify the sheen color and
-roughness for velvet-like finishes.
-
-## Local Development
-
-The demo must be served via HTTP because browsers restrict file-based module
-loading and requests due to CORS policies. Start a simple server in this
-directory with:
+Install dependencies and start the development server:
 
 ```bash
-python3 -m http.server
+npm install
+npm run dev
 ```
 
-Once the server is running, open
-<http://localhost:8000/index.html> in your browser.
+The application is built with Next.js. During development it is served from <http://localhost:3000>. Share your current design simply by copying the browser URL, which encodes all parameters.
 
-Open your browser's developer console to view helpful logs when models or
-textures are loaded. If something fails to appear, these logs can help you
-troubleshoot issues.
+## Building for GitHub Pages
+
+To generate a static version of the site run:
+
+```bash
+npm run build
+```
+
+The exported files are written to the `out/` directory and can be pushed to GitHub Pages.
+
+Open your browser's developer console to view helpful logs when models or textures are loaded. If something fails to appear, these logs can help you troubleshoot issues.

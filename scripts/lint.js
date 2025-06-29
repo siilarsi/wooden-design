@@ -14,17 +14,17 @@ function checkFile(path) {
 }
 
 function checkScriptSyntax() {
-  const script = fs.readFileSync('src/main.js', 'utf8');
-  const res = spawnSync(process.execPath, ['--check', 'src/main.js']);
+  const res = spawnSync(process.execPath, ['--check', 'src/utils.js']);
   if (res.status !== 0) {
-    console.error('src/main.js:', res.stderr.trim());
+    console.error('src/utils.js:', res.stderr.toString().trim());
     hasError = true;
   }
 }
 
 checkFile('src/utils.js');
-checkFile('src/main.js');
-checkFile('index.html');
+['components/Viewer.tsx', 'components/DropZone.tsx', 'components/FinishSelect.tsx', 'components/EventLog.tsx', 'app/page.tsx'].forEach(f => {
+  if (fs.existsSync(f)) checkFile(f);
+});
 checkScriptSyntax();
 
 if (hasError) process.exit(1);
