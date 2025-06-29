@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ParamHelp() {
   return (
-    <details id="paramHelp" style={{ maxWidth: 400 }}>
+    <details id="paramHelp">
       <summary>Material Parameter Help</summary>
       <ul>
         <li>
