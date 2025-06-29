@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "node tests/run.js",
-    "lint": "node scripts/lint.js",
-    "dev": "next dev",
-    "build": "next build && next export"
+    "lint": "node scripts/lint.js && eslint .",
+    "format": "prettier --write .",
+    "dev": "vite",
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
@@ -18,11 +19,22 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "@react-three/fiber": "9.7.5",
-    "@react-three/drei": "9.86.7"
+    "@react-three/drei": "9.86.7",
+    "zustand": "4.3.9",
+    "leva": "0.9.37"
   },
   "devDependencies": {
     "typescript": "5.2.2",
     "@types/react": "18.2.18",
-    "@types/node": "20.4.2"
+    "@types/node": "20.4.2",
+    "vite": "4.4.9",
+    "@vitejs/plugin-react": "4.0.1",
+    "eslint": "8.48.0",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "@typescript-eslint/parser": "6.7.3",
+    "@typescript-eslint/eslint-plugin": "6.7.3",
+    "eslint-config-prettier": "9.0.0",
+    "prettier": "3.0.3"
   }
 }

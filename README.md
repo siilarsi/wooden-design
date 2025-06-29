@@ -33,7 +33,7 @@ npm install
 npm run dev
 ```
 
-The application is built with Next.js. During development it is served from <http://localhost:3000>. Share your current design simply by copying the browser URL, which encodes all parameters.
+The application uses Vite for development. Run `npm run dev` and open <http://localhost:5173>. Share your current design simply by copying the browser URL, which encodes all parameters.
 
 ## Building for GitHub Pages
 
@@ -43,6 +43,15 @@ To generate a static version of the site run:
 npm run build
 ```
 
-The exported files are written to the `out/` directory and can be pushed to GitHub Pages.
+The built files are written to the `dist/` directory and can be deployed to GitHub Pages.
+
+### Linting and Formatting
+
+Run the linter and formatter with:
+
+```bash
+npm run lint
+npm run format
+```
 
 Open your browser's developer console to view helpful logs when models or textures are loaded. If something fails to appear, these logs can help you troubleshoot issues.
