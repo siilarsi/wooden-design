@@ -30,6 +30,7 @@ export const useMaterialStore = create<MaterialState>((set) => ({
   sheenRoughness: 0.5,
   anisotropy: 0,
   anisotropyRotation: 0,
+  // prettier-ignore
   texture: (null),
   set: (values) => set(values),
 }));

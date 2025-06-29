@@ -15,6 +15,7 @@ export default function DropZone({ onFile }: Props) {
   return (
     <div
       id="dropArea"
+      className="dropArea"
       onDragOver={(e) => {
         e.preventDefault();
       }}
@@ -23,14 +24,13 @@ export default function DropZone({ onFile }: Props) {
         handleFiles(e.dataTransfer.files);
       }}
       onClick={() => inputRef.current?.click()}
-      style={{ border: '2px dashed #888', padding: 20 }}
     >
       Drag & Drop Texture Here
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
-        style={{ display: 'none' }}
+        className="fileInput"
         onChange={(e) => handleFiles(e.target.files)}
       />
     </div>

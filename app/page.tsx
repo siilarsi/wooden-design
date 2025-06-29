@@ -113,18 +113,7 @@ export default function Page() {
     <div>
       <Viewer />
       <Leva collapsed />
-      <div
-        id="ui"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          padding: 10,
-          maxWidth: 300,
-          background: 'rgba(255,255,255,0.8)',
-          zIndex: 1,
-        }}
-      >
+      <div id="ui">
         <section>
           <h2>Model</h2>
           <select

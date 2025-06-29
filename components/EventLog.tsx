@@ -27,18 +27,9 @@ export default function EventLog({ events }: Props) {
   );
 
   return (
-    <div
-      id="eventViewer"
-      style={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
-    >
-      <div
-        onMouseDown={startDrag}
-        style={{ height: 6, cursor: 'ns-resize', background: '#ccc' }}
-      />
-      <div
-        id="eventLog"
-        style={{ height, overflowY: 'auto', background: 'white' }}
-      >
+    <div id="eventViewer">
+      <div className="drag-handle" onMouseDown={startDrag} />
+      <div id="eventLog" style={{ height }}>
         {events.map((e, i) => (
           <div key={i}>{e}</div>
         ))}
