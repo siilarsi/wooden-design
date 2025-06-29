@@ -23,7 +23,7 @@ body {
   width: 280px;
   font-family: ui-monospace, SFMono-Regular, Menlo, 'Roboto Mono', monospace;
   font-size: 11px;
-  color: #fefefe;
+  color: #8c92a4;
   background: #292d39;
   box-shadow: 0 0 9px 0 #00000088;
   border-radius: 10px;
@@ -71,7 +71,7 @@ body {
 .panel input,
 .panel button {
   font: inherit;
-  color: #fefefe;
+  color: #8c92a4;
   background: #373c4b;
   border: 1px solid #535760;
   border-radius: 3px;
@@ -109,7 +109,7 @@ body {
   padding: 20px;
   border-radius: 4px;
   background: #373c4b;
-  color: #fefefe;
+  color: #8c92a4;
   cursor: pointer;
   text-align: center;
 }
@@ -147,7 +147,7 @@ body {
 
 .option-label {
   font-size: 11px;
-  color: #fefefe;
+  color: #8c92a4;
   font-family: inherit;
 }
 
