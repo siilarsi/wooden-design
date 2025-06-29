@@ -47,7 +47,14 @@ export default function Panel({ id, title, children }: PanelProps) {
           {title}
         </button>
         <span className="drag-dots" onMouseDown={onMouseDown}>
-          ⋮⋮
+          <svg width="20" height="10" viewBox="0 0 28 14">
+            <circle cx="2" cy="2" r="2" />
+            <circle cx="14" cy="2" r="2" />
+            <circle cx="26" cy="2" r="2" />
+            <circle cx="2" cy="12" r="2" />
+            <circle cx="14" cy="12" r="2" />
+            <circle cx="26" cy="12" r="2" />
+          </svg>
         </span>
       </div>
       <div className="panel-body">{children}</div>
