@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "https://unpkg.com/three@0.158.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js";
-import { buildQuery, debounce, logEvent } from "./src/utils.js";
+import { buildQuery, debounce, logEvent } from "./utils.js";
 import GUI from "https://cdn.jsdelivr.net/npm/lil-gui@0.18/+esm";
 
 
