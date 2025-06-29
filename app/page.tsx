@@ -113,7 +113,7 @@ export default function Page() {
     <div>
       <Viewer />
       <Leva collapsed />
-      <Panel id="ui" title="Settings" frameless>
+      <Panel id="ui" title="Settings">
         <section className="option-row">
           <label htmlFor="modelSelect" className="option-label">
             Model

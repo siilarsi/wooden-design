@@ -29,17 +29,6 @@ body {
   border-radius: 10px;
 }
 
-.panel.panel-frameless {
-  background: none;
-  box-shadow: none;
-}
-.panel.panel-frameless .panel-title {
-  background: none;
-}
-.panel.panel-frameless .panel-body {
-  background: none;
-}
-
 .panel-title {
   position: relative;
   display: flex;
@@ -66,8 +55,6 @@ body {
   left: 50%;
   transform: translateX(-50%);
   cursor: grab;
-  font-size: 16px;
-  color: #8c92a4;
 }
 
 .panel-body {
