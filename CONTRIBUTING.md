@@ -7,6 +7,8 @@
   allowing the commit.
 - Add or update tests when modifying code or fixing bugs.
 - Update documentation and AGENTS.md if processes change.
+- Built files are deployed automatically via GitHub Actions; do not commit the
+  contents of `dist/`.
 - Add entries to `POSTMORTEM.md` for any production-facing issues.
 - Keep application logic in the `src/` directory (e.g. `src/main.js`). Avoid
   adding large inline scripts to `index.html`.

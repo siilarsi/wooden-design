@@ -72,6 +72,9 @@ npm run build
 ```
 
 The built files are written to the `dist/` directory and can be deployed to GitHub Pages.
+On each push to `main`, a GitHub Actions workflow automatically runs
+`npm run build` and publishes this directory, so you normally do not need to
+commit the built files.
 
 ### Linting and Formatting
 

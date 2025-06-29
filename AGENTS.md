@@ -35,7 +35,10 @@
 - Update documentation and this AGENTS.md when workflows or commands change.
 
 ## 6. CI / Build Steps
-- No automated CI. Run `npm run dev` for local development (Vite) and `npm run build` to produce `dist/` for GitHub Pages.
+- GitHub Actions builds and deploys the site to GitHub Pages on every push to
+  `main`. The workflow installs dependencies, runs `npm run build`, and
+  publishes the `dist/` directory.
+- Run `npm run dev` for local development. Do not commit files from `dist/`.
 
 ## 6a. Postmortems
 Document any production issues in `POSTMORTEM.md`. Add a new dated section with
