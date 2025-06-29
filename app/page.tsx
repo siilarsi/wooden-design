@@ -5,6 +5,7 @@ import DropZone from '../components/DropZone';
 import FinishSelect from '../components/FinishSelect';
 import EventLog from '../components/EventLog';
 import ParamHelp from '../components/ParamHelp';
+import Panel from '../components/Panel';
 import { buildQuery } from '../src/utils.js';
 import { useMaterialStore } from '../src/state';
 import { Leva, useControls } from 'leva';
@@ -113,7 +114,7 @@ export default function Page() {
     <div>
       <Viewer />
       <Leva collapsed />
-      <div id="ui">
+      <Panel id="ui" title="Settings">
         <section>
           <h2>Model</h2>
           <select
@@ -142,7 +143,7 @@ export default function Page() {
           <FinishSelect value={finish} onChange={(v) => set({ finish: v })} />
         </section>
         <ParamHelp />
-      </div>
+      </Panel>
       <EventLog events={events} />
     </div>
   );
