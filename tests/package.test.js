@@ -4,7 +4,9 @@ const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 describe('package config', () => {
   it('includes next dependency', () => {
-    expect(typeof (pkg.dependencies && pkg.dependencies.next)).toEqual('string');
+    expect(typeof (pkg.dependencies && pkg.dependencies.next)).toEqual(
+      'string',
+    );
   });
 
   it('defines build script', () => {
@@ -12,6 +14,6 @@ describe('package config', () => {
   });
 
   it('pins drei to a published version', () => {
-    expect(pkg.dependencies['@react-three/drei']).toEqual('0.9.7');
+    expect(pkg.dependencies['@react-three/drei']).toEqual('9.99.7');
   });
 });
