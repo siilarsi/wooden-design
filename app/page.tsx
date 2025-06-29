@@ -130,7 +130,12 @@ export default function Page() {
         </section>
         <section>
           <h2>Texture</h2>
-          <DropZone onFile={(f) => logEvent('Loaded texture ' + f.name)} />
+          <DropZone
+            onFile={(f) => {
+              set({ texture: URL.createObjectURL(f) });
+              logEvent('Loaded texture ' + f.name);
+            }}
+          />
         </section>
         <section>
           <h2>Finish</h2>

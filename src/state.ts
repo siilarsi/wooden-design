@@ -13,6 +13,7 @@ export interface MaterialState {
   sheenRoughness: number;
   anisotropy: number;
   anisotropyRotation: number;
+  texture: string | null;
   set(values: Partial<MaterialState>): void;
 }
 
@@ -29,5 +30,6 @@ export const useMaterialStore = create<MaterialState>((set) => ({
   sheenRoughness: 0.5,
   anisotropy: 0,
   anisotropyRotation: 0,
+  texture: (null),
   set: (values) => set(values),
 }));

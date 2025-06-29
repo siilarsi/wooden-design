@@ -26,4 +26,10 @@ describe('material store', () => {
     useMaterialStore.getState().set({ roughness: 0.25 });
     expect(useMaterialStore.getState().roughness).toEqual(0.25);
   });
+
+  it('stores texture url', () => {
+    expect(useMaterialStore.getState().texture).toEqual(null);
+    useMaterialStore.getState().set({ texture: 'foo.png' });
+    expect(useMaterialStore.getState().texture).toEqual('foo.png');
+  });
 });
