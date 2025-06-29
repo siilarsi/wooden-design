@@ -22,7 +22,7 @@ function checkScriptSyntax() {
 }
 
 checkFile('src/utils.js');
-['components/Viewer.tsx', 'components/DropZone.tsx', 'components/FinishSelect.tsx', 'components/EventLog.tsx', 'app/page.tsx'].forEach(f => {
+['components/Viewer.tsx', 'components/DropZone.tsx', 'components/FinishSelect.tsx', 'components/EventLog.tsx', 'app/page.tsx', 'src/state.ts', 'src/main.tsx'].forEach(f => {
   if (fs.existsSync(f)) checkFile(f);
 });
 checkScriptSyntax();

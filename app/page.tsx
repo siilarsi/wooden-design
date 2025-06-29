@@ -5,32 +5,117 @@ import DropZone from '../components/DropZone';
 import FinishSelect from '../components/FinishSelect';
 import EventLog from '../components/EventLog';
 import { buildQuery } from '../src/utils.js';
+import { useMaterialStore } from '../src/state';
+import { Leva, useControls } from 'leva';
 
 export default function Page() {
   const [events, setEvents] = useState<string[]>([]);
-  const [model, setModel] = useState('models/plank1.gltf');
-  const [finish, setFinish] = useState('custom');
+  const {
+    model,
+    finish,
+    roughness,
+    metalness,
+    clearcoat,
+    clearcoatRoughness,
+    specularIntensity,
+    specularColor,
+    sheenColor,
+    sheenRoughness,
+    anisotropy,
+    anisotropyRotation,
+    set,
+  } = useMaterialStore();
 
   const logEvent = (m: string) => setEvents((e) => [...e, m]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('model')) setModel(params.get('model') as string);
-    if (params.get('finish')) setFinish(params.get('finish') as string);
-  }, []);
+    const obj: any = {};
+    if (params.get('model')) obj.model = params.get('model');
+    if (params.get('finish')) obj.finish = params.get('finish');
+    set(obj);
+  }, [set]);
 
   useEffect(() => {
     const q = buildQuery({ model, finish });
     history.replaceState(null, '', '?' + q);
   }, [model, finish]);
 
+  useControls({
+    roughness: {
+      value: roughness,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      onChange: (v: number) => set({ roughness: v }),
+    },
+    metalness: {
+      value: metalness,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      onChange: (v: number) => set({ metalness: v }),
+    },
+    clearcoat: {
+      value: clearcoat,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      onChange: (v: number) => set({ clearcoat: v }),
+    },
+    clearcoatRoughness: {
+      value: clearcoatRoughness,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      onChange: (v: number) => set({ clearcoatRoughness: v }),
+    },
+    specularIntensity: {
+      value: specularIntensity,
+      min: 0,
+      max: 2,
+      step: 0.01,
+      onChange: (v: number) => set({ specularIntensity: v }),
+    },
+    specularColor: {
+      value: specularColor,
+      onChange: (v: string) => set({ specularColor: v }),
+    },
+    sheenColor: {
+      value: sheenColor,
+      onChange: (v: string) => set({ sheenColor: v }),
+    },
+    sheenRoughness: {
+      value: sheenRoughness,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      onChange: (v: number) => set({ sheenRoughness: v }),
+    },
+    anisotropy: {
+      value: anisotropy,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      onChange: (v: number) => set({ anisotropy: v }),
+    },
+    anisotropyRotation: {
+      value: anisotropyRotation,
+      min: 0,
+      max: Math.PI * 2,
+      step: 0.01,
+      onChange: (v: number) => set({ anisotropyRotation: v }),
+    },
+  });
+
   return (
     <div>
       <Viewer />
+      <Leva collapsed />
       <div id="ui">
         <section>
           <h2>Model</h2>
-          <select id="modelSelect" value={model} onChange={(e) => setModel(e.target.value)}>
+          <select id="modelSelect" value={model} onChange={(e) => set({ model: e.target.value })}>
             <option value="models/plank1.gltf">Plank 1</option>
             <option value="models/plank2.gltf">Plank 2</option>
             <option value="cube">Cube</option>
@@ -44,7 +129,7 @@ export default function Page() {
         </section>
         <section>
           <h2>Finish</h2>
-          <FinishSelect value={finish} onChange={setFinish} />
+          <FinishSelect value={finish} onChange={(v) => set({ finish: v })} />
         </section>
       </div>
       <EventLog events={events} />

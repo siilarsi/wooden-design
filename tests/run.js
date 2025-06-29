@@ -7,5 +7,7 @@ import './instructions.test.js';
 import './main-import.test.js';
 import './syntax.test.js';
 import './init-order.test.js';
+import './state.test.js';
+import './render.test.js';
 import { run } from './test-utils.js';
 await run();
