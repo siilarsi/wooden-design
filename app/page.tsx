@@ -5,6 +5,7 @@ import DropZone from '../components/DropZone';
 import FinishSelect from '../components/FinishSelect';
 import EventLog from '../components/EventLog';
 import Panel from '../components/Panel';
+import ParamHelp from '../components/ParamHelp';
 import { buildQuery } from '../src/utils.js';
 import { useMaterialStore } from '../src/state';
 import { Leva, useControls } from 'leva';
@@ -41,13 +42,9 @@ export default function Page() {
     if (params.get('clearcoat'))
       obj.clearcoat = parseFloat(params.get('clearcoat')!);
     if (params.get('clearcoatRoughness'))
-      obj.clearcoatRoughness = parseFloat(
-        params.get('clearcoatRoughness')!,
-      );
+      obj.clearcoatRoughness = parseFloat(params.get('clearcoatRoughness')!);
     if (params.get('specularIntensity'))
-      obj.specularIntensity = parseFloat(
-        params.get('specularIntensity')!,
-      );
+      obj.specularIntensity = parseFloat(params.get('specularIntensity')!);
     if (params.get('specularColor'))
       obj.specularColor = params.get('specularColor');
     if (params.get('sheenColor')) obj.sheenColor = params.get('sheenColor');
@@ -56,9 +53,7 @@ export default function Page() {
     if (params.get('anisotropy'))
       obj.anisotropy = parseFloat(params.get('anisotropy')!);
     if (params.get('anisotropyRotation'))
-      obj.anisotropyRotation = parseFloat(
-        params.get('anisotropyRotation')!,
-      );
+      obj.anisotropyRotation = parseFloat(params.get('anisotropyRotation')!);
     if (params.get('texture')) obj.texture = params.get('texture');
     set(obj);
   }, [set]);
@@ -207,6 +202,7 @@ export default function Page() {
             logEvent('Loaded texture ' + f.name);
           }}
         />
+        <ParamHelp />
       </Panel>
       <EventLog events={events} />
     </div>
