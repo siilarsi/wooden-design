@@ -9,9 +9,16 @@ const presets = ['custom', 'matte', 'satin', 'gloss'];
 
 export default function FinishSelect({ value, onChange }: Props) {
   return (
-    <select id="finishSelect" value={value} onChange={(e) => onChange(e.target.value)}>
+    <select
+      id="finishSelect"
+      value={value}
+      aria-label="Finish preset"
+      onChange={(e) => onChange(e.target.value)}
+    >
       {presets.map((p) => (
-        <option key={p} value={p}>{p[0].toUpperCase() + p.slice(1)}</option>
+        <option key={p} value={p}>
+          {p[0].toUpperCase() + p.slice(1)}
+        </option>
       ))}
     </select>
   );

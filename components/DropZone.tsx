@@ -16,6 +16,7 @@ export default function DropZone({ onFile }: Props) {
     <div
       id="dropArea"
       className="dropArea"
+      aria-label="Texture upload drop zone"
       onDragOver={(e) => {
         e.preventDefault();
       }}
@@ -31,6 +32,7 @@ export default function DropZone({ onFile }: Props) {
         type="file"
         accept="image/*"
         className="fileInput"
+        aria-label="Upload texture image"
         onChange={(e) => handleFiles(e.target.files)}
       />
     </div>

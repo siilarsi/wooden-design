@@ -41,12 +41,17 @@ export default function Panel({ id, title, children }: PanelProps) {
       <div className="panel-title">
         <button
           className="collapse-btn"
+          aria-label="Toggle panel"
           onClick={() => setCollapsed(!collapsed)}
         >
           <span className="collapse-icon">{collapsed ? '▸' : '▾'}</span>
           {title}
         </button>
-        <span className="drag-dots" onMouseDown={onMouseDown}>
+        <span
+          className="drag-dots"
+          aria-label="Drag panel"
+          onMouseDown={onMouseDown}
+        >
           <svg width="20" height="10" viewBox="0 0 28 14">
             <circle cx="2" cy="2" r="2" />
             <circle cx="14" cy="2" r="2" />
