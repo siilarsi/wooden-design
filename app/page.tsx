@@ -34,13 +34,65 @@ export default function Page() {
     const obj: any = {};
     if (params.get('model')) obj.model = params.get('model');
     if (params.get('finish')) obj.finish = params.get('finish');
+    if (params.get('roughness'))
+      obj.roughness = parseFloat(params.get('roughness')!);
+    if (params.get('metalness'))
+      obj.metalness = parseFloat(params.get('metalness')!);
+    if (params.get('clearcoat'))
+      obj.clearcoat = parseFloat(params.get('clearcoat')!);
+    if (params.get('clearcoatRoughness'))
+      obj.clearcoatRoughness = parseFloat(
+        params.get('clearcoatRoughness')!,
+      );
+    if (params.get('specularIntensity'))
+      obj.specularIntensity = parseFloat(
+        params.get('specularIntensity')!,
+      );
+    if (params.get('specularColor'))
+      obj.specularColor = params.get('specularColor');
+    if (params.get('sheenColor')) obj.sheenColor = params.get('sheenColor');
+    if (params.get('sheenRoughness'))
+      obj.sheenRoughness = parseFloat(params.get('sheenRoughness')!);
+    if (params.get('anisotropy'))
+      obj.anisotropy = parseFloat(params.get('anisotropy')!);
+    if (params.get('anisotropyRotation'))
+      obj.anisotropyRotation = parseFloat(
+        params.get('anisotropyRotation')!,
+      );
+    if (params.get('texture')) obj.texture = params.get('texture');
     set(obj);
   }, [set]);
 
   useEffect(() => {
-    const q = buildQuery({ model, finish });
+    const q = buildQuery({
+      model,
+      finish,
+      roughness,
+      metalness,
+      clearcoat,
+      clearcoatRoughness,
+      specularIntensity,
+      specularColor,
+      sheenColor,
+      sheenRoughness,
+      anisotropy,
+      anisotropyRotation,
+    });
     history.replaceState(null, '', '?' + q);
-  }, [model, finish]);
+  }, [
+    model,
+    finish,
+    roughness,
+    metalness,
+    clearcoat,
+    clearcoatRoughness,
+    specularIntensity,
+    specularColor,
+    sheenColor,
+    sheenRoughness,
+    anisotropy,
+    anisotropyRotation,
+  ]);
 
   const [, setCtrl] = useControls(() => ({
     roughness: {
