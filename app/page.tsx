@@ -171,6 +171,14 @@ export default function Page() {
   return (
     <div>
       <Viewer />
+      <details className="menu">
+        <summary>menu</summary>
+        <ul>
+          <li>
+            <a href="./help/">material parameter help</a>
+          </li>
+        </ul>
+      </details>
       <Leva collapsed />
       <Panel id="ui" title="">
         <section className="option-row">
@@ -201,9 +209,6 @@ export default function Page() {
             logEvent('Loaded texture ' + f.name);
           }}
         />
-        <a href="/help" className="help-link">
-          material parameter help
-        </a>
       </Panel>
       <EventLog events={events} />
     </div>
