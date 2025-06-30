@@ -43,31 +43,8 @@ The application uses Vite for development. Run `npm run dev` and open <http://lo
 
 ## Material Parameters
 
-The viewer exposes a set of physical material properties. They can be adjusted
-through the on-page controls or by specifying them in the URL. Below is a quick
-reference for each parameter.
-
-| Parameter            | Description                                                        | Example                            |
-| -------------------- | ------------------------------------------------------------------ | ---------------------------------- |
-| `roughness`          | `0` gives a mirror-like finish, `1` results in a fully matte look. | `?roughness=0.2` for shiny varnish |
-| `metalness`          | `0` behaves like wood or plastic, `1` turns the surface metallic.  | `?metalness=1`                     |
-| `clearcoat`          | Strength of an extra transparent coat, useful for varnish.         | `?clearcoat=0.5`                   |
-| `clearcoatRoughness` | How glossy the clearcoat itself is.                                | `?clearcoatRoughness=0.1`          |
-| `specularIntensity`  | Scales the brightness of highlights.                               | `?specularIntensity=1.5`           |
-| `specularColor`      | Hex color used to tint highlights.                                 | `?specularColor=%23ffffff`         |
-| `sheenColor`         | Color of the fabric-like sheen effect.                             | `?sheenColor=%23ff8800`            |
-| `sheenRoughness`     | Roughness of the sheen component.                                  | `?sheenRoughness=0.6`              |
-| `anisotropy`         | Amount of directional reflection, simulating grain.                | `?anisotropy=0.8`                  |
-| `anisotropyRotation` | Rotation of the anisotropic direction (radians).                   | `?anisotropyRotation=1.57`         |
-
-You can combine these parameters in the query string to share a particular
-look. For example:
-
-```
-?roughness=0.2&clearcoat=0.7&anisotropy=0.5
-```
-
-will load the page with a shiny, varnished appearance that shows wood grain.
+The application supports a variety of physical material properties. A full description of each option is available on the [help page](./help).
+Parameters can be tweaked through the interface or included in the URL to share a specific look.
 
 ## Building for GitHub Pages
 

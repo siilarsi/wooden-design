@@ -5,7 +5,6 @@ import DropZone from '../components/DropZone';
 import FinishSelect from '../components/FinishSelect';
 import EventLog from '../components/EventLog';
 import Panel from '../components/Panel';
-import ParamHelp from '../components/ParamHelp';
 import { buildQuery } from '../src/utils.js';
 import { useMaterialStore } from '../src/state';
 import { Leva, useControls } from 'leva';
@@ -202,7 +201,9 @@ export default function Page() {
             logEvent('Loaded texture ' + f.name);
           }}
         />
-        <ParamHelp />
+        <a href="/help" className="help-link">
+          material parameter help
+        </a>
       </Panel>
       <EventLog events={events} />
     </div>

@@ -29,7 +29,11 @@ export default function EventLog({ events }: Props) {
 
   return (
     <div id="eventViewer">
-      <div className="drag-handle" onMouseDown={startDrag} />
+      <div
+        className="drag-handle"
+        aria-label="Resize log"
+        onMouseDown={startDrag}
+      />
       <div id="eventLog" style={{ height }}>
         {events.map((e, i) => (
           <div key={i}>{e}</div>
