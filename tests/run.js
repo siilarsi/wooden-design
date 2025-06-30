@@ -10,6 +10,7 @@ import './init-order.test.js';
 import './state.test.js';
 import './finish.test.js';
 import './param-help.test.js';
+import './help-page.test.js';
 import './html.test.js';
 import './url.test.js';
 import { run } from './test-utils.js';
