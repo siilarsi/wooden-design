@@ -43,7 +43,7 @@ The application uses Vite for development. Run `npm run dev` and open <http://lo
 
 ## Material Parameters
 
-The application supports a variety of physical material properties. A full description of each option is available on the [help page](./help).
+The application supports a variety of physical material properties. A full description of each option is available on the [help page](./help/), accessible from the menu in the top-right corner of the app.
 Parameters can be tweaked through the interface or included in the URL to share a specific look.
 
 ## Building for GitHub Pages
